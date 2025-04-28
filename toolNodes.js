@@ -101,7 +101,7 @@ const toolNodes = {
     tools: [
       { name: "AskSage", description: "Government secure AI platform with IL5 authorization", link: "https://www.asksage.ai/" },
       { name: "Copilot for Government", description: "Microsoft's AI assistant built for government compliance", link: "https://www.microsoft.com/en-us/microsoft-365/government/microsoft-365-copilot-for-government" },
-      { name: "Google Workspace with Gemini for Government", description: "Google's secure AI features for government use", link: "https://workspace.google.com/solutions/government/" }
+      { name: "Google Workspace with Gemini for Government", description: "Google's secure AI features for government use", link: "https://workspace.google.com/industries/government/" }
     ]
   },
 
