@@ -6,8 +6,6 @@
     <meta name="theme-color" content="#0f0c29" />
     <meta name="description" content="AI Arcade Finder - Neon-powered AI tool explorer!" />
     <title>AI Arcade Finder 🎮✨</title>
-    <!-- Add CSS -->
-    <link rel="stylesheet" href="index.css">
     <!-- React and React DOM -->
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
@@ -212,6 +210,36 @@
         box-shadow: 0 0 15px rgba(96,165,250,0.7);
       }
       
+      /* Bottom navigation buttons */
+      .bottom-nav {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(96,165,250,0.3);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+      
+      .nav-button {
+        background: transparent;
+        border: 2px solid #8b5cf6;
+        color: #8b5cf6;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1rem;
+        box-shadow: 0 0 10px rgba(139,92,246,0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+      
+      .nav-button:hover {
+        color: white;
+        border-color: #7c3aed;
+        box-shadow: 0 0 15px rgba(139,92,246,0.7);
+      }
+      
       /* Responsive adjustments */
       @media (max-width: 768px) {
         .title {
@@ -230,6 +258,10 @@
           padding: 12px;
           font-size: 1rem;
         }
+        
+        .bottom-nav {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -239,7 +271,7 @@
     
     <!-- Load your JavaScript files as modules with type="text/babel" -->
     <script type="text/babel">
-      // Include toolNodes.js directly
+      // Include updated toolNodes.js here
       const toolNodes = {
         start: {
           title: "What do you want to create with AI?",
@@ -254,7 +286,18 @@
           ]
         },
 
+        // Text section with subcategories
         text: {
+          title: "What type of text do you want to generate?",
+          options: [
+            { text: "General writing and brainstorming", node: "general_text" },
+            { text: "Technical or specialized content", node: "specialized_text" },
+            { text: "Creative writing or fiction", node: "creative_text" },
+            { text: "Code and programming assistance", node: "code_text" }
+          ]
+        },
+
+        general_text: {
           title: "General Text Generation Tools",
           description: "These tools can help with everyday writing tasks and brainstorming:",
           tools: [
@@ -263,10 +306,69 @@
             { name: "Gemini", description: "Google's multimodal AI that can process text, images, and more", link: "https://gemini.google.com/" },
             { name: "You.com", description: "AI search that combines web results with generative responses", link: "https://you.com/" },
             { name: "Mistral", description: "Open-weight AI model with powerful language capabilities", link: "https://mistral.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different text options", node: "text" }
           ]
         },
 
+        specialized_text: {
+          title: "Specialized Text Generation Tools",
+          description: "These tools excel at specific types of technical content:",
+          tools: [
+            { name: "Consensus", description: "Scientific research assistant for exploring academic literature", link: "https://consensus.app/" },
+            { name: "NotebookLM", description: "Google's tool for analyzing and working with source documents", link: "https://notebooklm.google.com/" },
+            { name: "StormAI", description: "Advanced AI system for complex reasoning and specialized knowledge domains", link: "https://www.storm.ai/" },
+            { name: "Perplexity", description: "AI search that provides cited answers from the web", link: "https://www.perplexity.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different text options", node: "text" }
+          ]
+        },
+
+        creative_text: {
+          title: "Creative Writing Tools",
+          description: "Perfect for fiction, poetry, and creative content:",
+          tools: [
+            { name: "Sudowrite", description: "AI writing companion for fiction authors", link: "https://www.sudowrite.com/" },
+            { name: "NovelAI", description: "AI storytelling platform designed for narrative fiction", link: "https://novelai.net/" },
+            { name: "Poe", description: "Platform with multiple AI models for creative explorations", link: "https://poe.com/" },
+            { name: "Grok", description: "X's AI with a personality designed for creative exchanges", link: "https://grok.x.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different text options", node: "text" }
+          ]
+        },
+
+        code_text: {
+          title: "Coding and Programming Tools",
+          description: "AI assistance for developers:",
+          tools: [
+            { name: "GitHub Copilot", description: "AI pair programmer that integrates with code editors", link: "https://github.com/features/copilot" },
+            { name: "Replit Ghostwriter", description: "AI coding assistant built into the Replit IDE", link: "https://replit.com/ghostwriter" },
+            { name: "Amazon CodeWhisperer", description: "AI coding companion with security scanning features", link: "https://aws.amazon.com/codewhisperer/" },
+            { name: "Tabnine", description: "Code completion assistant with multiple language support", link: "https://www.tabnine.com/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different text options", node: "text" }
+          ]
+        },
+
+        // Image section with subcategories
         image: {
+          title: "What do you want to do with images?",
+          options: [
+            { text: "Generate brand new images", node: "generate_image" },
+            { text: "Edit or enhance existing images", node: "edit_image" },
+            { text: "Create diagrams or designs", node: "design_image" }
+          ]
+        },
+
+        generate_image: {
           title: "Image Generation Tools",
           description: "Create original images from text prompts:",
           tools: [
@@ -276,10 +378,53 @@
             { name: "DALL-E (via ChatGPT)", description: "OpenAI's image generator integrated with ChatGPT", link: "https://chat.openai.com/" },
             { name: "Gemini", description: "Google's multimodal AI with image generation capabilities", link: "https://gemini.google.com/" },
             { name: "Flux AI", description: "New AI image generator with advanced capabilities", link: "https://flux.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different image options", node: "image" }
           ]
         },
 
+        edit_image: {
+          title: "Image Editing Tools",
+          description: "Edit, enhance, or modify existing images:",
+          tools: [
+            { name: "Adobe Firefly", description: "Creative generative AI integrated with Adobe products", link: "https://www.adobe.com/products/firefly.html" },
+            { name: "Canva AI", description: "User-friendly design platform with AI editing features", link: "https://www.canva.com/" },
+            { name: "Krea", description: "AI image editing with intuitive interface", link: "https://www.krea.ai/" },
+            { name: "Luminar Neo", description: "Photo editor with AI-powered enhancement tools", link: "https://skylum.com/luminar" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different image options", node: "image" }
+          ]
+        },
+
+        design_image: {
+          title: "AI Design Tools",
+          description: "Create diagrams, designs, and visual assets:",
+          tools: [
+            { name: "Microsoft Designer", description: "AI-powered design tool for various visual content", link: "https://designer.microsoft.com/" },
+            { name: "Diagram", description: "Create professional diagrams and flowcharts with AI", link: "https://diagram.com/" },
+            { name: "Uizard", description: "Turn sketches into digital designs with AI", link: "https://uizard.io/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different image options", node: "image" }
+          ]
+        },
+
+        // Video section with subcategories
         video: {
+          title: "What kind of video content do you need?",
+          options: [
+            { text: "Generate video from text", node: "text_to_video" },
+            { text: "Edit existing videos", node: "edit_video" },
+            { text: "Create animated characters", node: "character_video" }
+          ]
+        },
+
+        text_to_video: {
           title: "Text-to-Video Generation Tools",
           description: "Create videos directly from text prompts:",
           tools: [
@@ -288,6 +433,40 @@
             { name: "Sora", description: "OpenAI's text-to-video model (limited access)", link: "https://openai.com/sora" },
             { name: "Luma Labs", description: "AI video generation tools for creative professionals", link: "https://lumalabs.ai/" },
             { name: "Synthesys", description: "Text-to-video platform with multiple creative options", link: "https://synthesys.io/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different video options", node: "video" }
+          ]
+        },
+
+        edit_video: {
+          title: "AI Video Editing Tools",
+          description: "Edit and enhance existing video content:",
+          tools: [
+            { name: "Descript", description: "Text-based video editor with AI features", link: "https://www.descript.com/" },
+            { name: "Runway ML", description: "AI video editing with advanced effects", link: "https://runwayml.com/" },
+            { name: "Kapwing", description: "Online video editor with AI assistance", link: "https://www.kapwing.com/" },
+            { name: "Pictory", description: "Automatically create short videos from long-form content", link: "https://pictory.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different video options", node: "video" }
+          ]
+        },
+
+        character_video: {
+          title: "AI Character Animation Tools",
+          description: "Create animated characters and avatars:",
+          tools: [
+            { name: "D-ID", description: "Create talking avatars from still images", link: "https://www.d-id.com/" },
+            { name: "Synthesia", description: "AI video generation with virtual presenters", link: "https://www.synthesia.io/" },
+            { name: "HeyGen", description: "Create AI videos with virtual presenters", link: "https://www.heygen.com/" },
+            { name: "Hour One", description: "AI-generated human presenters for video content", link: "https://hourone.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different video options", node: "video" }
           ]
         },
 
@@ -301,6 +480,9 @@
             { name: "Tome", description: "AI-powered storytelling format for presentations", link: "https://tome.app/" },
             { name: "SlidesAI", description: "Generate entire presentations from text prompts", link: "https://www.slidesai.io/" },
             { name: "Microsoft Designer", description: "AI design tool with presentation capabilities", link: "https://designer.microsoft.com/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" }
           ]
         },
 
@@ -313,6 +495,9 @@
             { name: "Perplexity", description: "AI search engine that provides cited answers", link: "https://www.perplexity.ai/" },
             { name: "Consensus", description: "AI tool for searching and analyzing scientific papers", link: "https://consensus.app/" },
             { name: "Qdrant", description: "Vector database for document search and analysis", link: "https://qdrant.tech/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" }
           ]
         },
 
@@ -326,6 +511,9 @@
             { name: "Play.ht", description: "Convert text to natural-sounding speech", link: "https://play.ht/" },
             { name: "Soundraw", description: "AI music generation for content creators", link: "https://soundraw.io/" },
             { name: "AIVA", description: "AI composer for emotional soundtrack music", link: "https://www.aiva.ai/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" }
           ]
         },
 
@@ -344,130 +532,23 @@
             { name: "AskSage", description: "Government secure AI platform with IL5 authorization", link: "https://www.asksage.ai/" },
             { name: "Copilot for Government", description: "Microsoft's AI assistant built for government compliance", link: "https://www.microsoft.com/en-us/microsoft-365/government/microsoft-365-copilot-for-government" },
             { name: "Google Workspace with Gemini for Government", description: "Google's secure AI features for government use", link: "https://workspace.google.com/industries/government/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different options", node: "organization" }
           ]
         },
 
         education: {
-          title: "Coming Soon",
-          description: "Our AI education and research tools are launching soon. Stay tuned! 🚀"
+          title: "Education and Research Tools",
+          description: "AI tools tailored for educational environments:",
+          tools: [
+            { name: "Century", description: "AI learning platform for personalized education", link: "https://www.century.tech/" },
+            { name: "Gradescope", description: "AI-assisted grading and assessment tool", link: "https://www.gradescope.com/" },
+            { name: "Elicit", description: "Research assistant for literature review", link: "https://elicit.org/" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore different options", node: "organization" }
+          ]
         }
-      };
-
-      // AIArcadeFinder component
-      const AIArcadeFinder = () => {
-        const [currentNode, setCurrentNode] = React.useState('start');
-        const [searchQuery, setSearchQuery] = React.useState('');
-
-        const currentData = toolNodes[currentNode] || { title: "Coming Soon", description: "New content will be available shortly!", options: [] };
-
-        const navigate = (node) => {
-          setCurrentNode(node);
-          setSearchQuery('');
-          // Scroll to top when navigating
-          window.scrollTo(0, 0);
-        };
-
-        const filteredTools = currentData.tools ? currentData.tools.filter(tool => 
-          tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-          tool.description.toLowerCase().includes(searchQuery.toLowerCase())
-        ) : [];
-
-        return (
-          <div className="container">
-            <div className="content-box">
-              <div className="header">
-                <h1 className="title">AI ARCADE</h1>
-              </div>
-              
-              <div className="main-card">
-                <h2 className="card-title">{currentData.title}</h2>
-                
-                {currentData.description && (
-                  <p className="card-description">{currentData.description}</p>
-                )}
-                
-                {currentNode !== 'start' && (
-                  <button 
-                    className="back-button" 
-                    style={{ marginBottom: '20px', width: '150px' }}
-                    onClick={() => navigate('start')}
-                  >
-                    ← Back to Start
-                  </button>
-                )}
-                
-                {currentData.options && currentData.options.length > 0 && (
-                  <div className="button-grid">
-                    {currentData.options.map((option, idx) => (
-                      <button 
-                        key={idx} 
-                        className="glow-button"
-                        onClick={() => navigate(option.node)}
-                      >
-                        {option.text}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                
-                {currentData.tools && (
-                  <>
-                    <div>
-                      <input
-                        type="text"
-                        placeholder="Search tools..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
-                      />
-                    </div>
-                    
-                    <div>
-                      {filteredTools.map((tool, idx) => (
-                        <div key={idx} className="tool-card">
-                          <h3 className="tool-title">{tool.name}</h3>
-                          <p className="tool-description">{tool.description}</p>
-                          <a 
-                            href={tool.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="tool-link"
-                          >
-                            Visit Site
-                          </a>
-                        </div>
-                      ))}
-                      
-                      {filteredTools.length === 0 && searchQuery && (
-                        <p style={{ textAlign: 'center', color: '#dbeafe', padding: '20px 0' }}>
-                          No matching tools found.
-                        </p>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      // App component
-      const App = () => {
-        return (
-          <div>
-            <AIArcadeFinder />
-          </div>
-        );
-      };
-
-      // Render the App to the DOM
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      );
-    </script>
-  </body>
-</html>
