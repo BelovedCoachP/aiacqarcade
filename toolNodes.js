@@ -1,316 +1,283 @@
-// Educational AI Tool Navigator Data
-const educationalToolNodes = {
+const toolNodes = {
   start: {
-    title: "Find Your Perfect Educational AI Tools",
-    description: "Choose your educational goal to discover AI tools that will transform your teaching and learning experience:",
+    title: "What do you want to create with AI?",
     options: [
-      { text: "Create Learning Objectives & Curriculum", node: "objectives" },
-      { text: "Develop Course Content & Modules", node: "content" },
-      { text: "Design Presentations & Visual Materials", node: "presentations" },
-      { text: "Create Assessments & Rubrics", node: "assessments" },
-      { text: "Research & OER Content Creation", node: "research" },
-      { text: "Produce Educational Videos", node: "videos" },
-      { text: "General AI Writing & Brainstorming", node: "general_ai" }
+      { text: "Generate text and ideas", node: "text" },
+      { text: "Create or edit images", node: "image" },
+      { text: "Make videos or animations", node: "video" },
+      { text: "Build presentations", node: "presentations" },
+      { text: "Analyze documents and research", node: "documents" },
+      { text: "Generate or enhance audio", node: "audio" },
+      { text: "Help me find tools for Government or Education", node: "organization" }
     ]
   },
 
-  objectives: {
-    title: "Learning Objectives & Curriculum Development",
-    description: "AI tools to help create clear, measurable learning objectives and structure your curriculum:",
-    tools: [
-      { 
-        name: "ChatGPT 4o mini (free)", 
-        description: "Perfect for brainstorming learning objectives, creating Bloom's taxonomy-based outcomes, and structuring curriculum frameworks",
-        category: "Generative AI",
-        link: "https://chat.openai.com/",
-        tasks: ["Learning objectives", "Curriculum planning", "Competency mapping"]
-      },
-      { 
-        name: "Claude.AI", 
-        description: "Excellent for analyzing curriculum standards, creating detailed course outlines, and ensuring alignment between objectives and assessments",
-        category: "Generative AI",
-        link: "https://claude.ai/",
-        tasks: ["Standards alignment", "Course structure", "Assessment planning"]
-      },
-      { 
-        name: "Copilot", 
-        description: "Integrated with Microsoft Office - great for creating curriculum documents, lesson plans, and objective matrices in Word and Excel",
-        category: "Generative AI",
-        link: "https://copilot.microsoft.com/",
-        tasks: ["Document creation", "Template generation", "Collaboration"]
-      },
-      { 
-        name: "Perplexity", 
-        description: "Research current educational standards, best practices in curriculum design, and find examples from other institutions",
-        category: "Generative AI",
-        link: "https://www.perplexity.ai/",
-        tasks: ["Standards research", "Best practices", "Benchmarking"]
-      }
-    ],
+  // Text section with subcategories
+  text: {
+    title: "What type of text do you want to generate?",
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" },
-      { text: "📚 Explore Content Creation", node: "content" }
+      { text: "General writing and brainstorming", node: "general_text" },
+      { text: "Technical or specialized content", node: "specialized_text" },
+      { text: "Creative writing or fiction", node: "creative_text" },
+      { text: "Code and programming assistance", node: "code_text" }
     ]
   },
 
-  content: {
-    title: "Course Content & Module Development",
-    description: "Create engaging course materials, modules, and educational content:",
+  general_text: {
+    title: "General Text Generation Tools",
+    description: "These tools can help with everyday writing tasks and brainstorming:",
     tools: [
-      { 
-        name: "ChatGPT 4o mini (free)", 
-        description: "Generate module outlines, create explanatory content, develop activities, and write discussion prompts for any subject",
-        category: "Generative AI",
-        link: "https://chat.openai.com/",
-        tasks: ["Module outlines", "Activity creation", "Content writing"]
-      },
-      { 
-        name: "Claude.AI", 
-        description: "Excellent for creating structured learning materials, breaking down complex topics, and ensuring logical content flow",
-        category: "Generative AI",
-        link: "https://claude.ai/",
-        tasks: ["Content structuring", "Topic breakdown", "Learning sequences"]
-      },
-      { 
-        name: "Gemini", 
-        description: "Great for multimodal content creation - combine text with images, create interactive examples, and generate diverse content formats",
-        category: "Generative AI",
-        link: "https://gemini.google.com/",
-        tasks: ["Multimodal content", "Interactive examples", "Format variety"]
-      },
-      { 
-        name: "Mistral", 
-        description: "Open-source option for generating educational content with strong reasoning capabilities for technical subjects",
-        category: "Generative AI",
-        link: "https://mistral.ai/",
-        tasks: ["Technical content", "STEM materials", "Detailed explanations"]
-      }
+      { name: "ChatGPT (Free version)", description: "Versatile AI assistant for various text generation needs", link: "https://chat.openai.com/" },
+      { name: "Claude.AI", description: "Anthropic's conversational AI with strong reasoning capabilities", link: "https://claude.ai/" },
+      { name: "Gemini", description: "Google's multimodal AI that can process text, images, and more", link: "https://gemini.google.com/" },
+      { name: "You.com", description: "AI search that combines web results with generative responses", link: "https://you.com/" },
+      { name: "Mistral", description: "Open-weight AI model with powerful language capabilities", link: "https://mistral.ai/" }
     ],
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" },
-      { text: "🎨 Create Presentations", node: "presentations" }
+      { text: "Start over", node: "start" },
+      { text: "Explore different text options", node: "text" }
+    ]
+  },
+
+  specialized_text: {
+    title: "Specialized Text Generation Tools",
+    description: "These tools excel at specific types of technical content:",
+    tools: [
+      { name: "Consensus", description: "Scientific research assistant for exploring academic literature", link: "https://consensus.app/" },
+      { name: "NotebookLM", description: "Google's tool for analyzing and working with source documents", link: "https://notebooklm.google.com/" },
+      { name: "StormAI", description: "Advanced AI system for complex reasoning and specialized knowledge domains", link: "https://www.storm.ai/" },
+      { name: "Perplexity", description: "AI search that provides cited answers from the web", link: "https://www.perplexity.ai/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different text options", node: "text" }
+    ]
+  },
+
+  creative_text: {
+    title: "Creative Writing Tools",
+    description: "Perfect for fiction, poetry, and creative content:",
+    tools: [
+      { name: "Sudowrite", description: "AI writing companion for fiction authors", link: "https://www.sudowrite.com/" },
+      { name: "NovelAI", description: "AI storytelling platform designed for narrative fiction", link: "https://novelai.net/" },
+      { name: "Poe", description: "Platform with multiple AI models for creative explorations", link: "https://poe.com/" },
+      { name: "Grok", description: "X's AI with a personality designed for creative exchanges", link: "https://grok.x.ai/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different text options", node: "text" }
+    ]
+  },
+
+  code_text: {
+    title: "Coding and Programming Tools",
+    description: "AI assistance for developers:",
+    tools: [
+      { name: "GitHub Copilot", description: "AI pair programmer that integrates with code editors", link: "https://github.com/features/copilot" },
+      { name: "Replit Ghostwriter", description: "AI coding assistant built into the Replit IDE", link: "https://replit.com/ghostwriter" },
+      { name: "Amazon CodeWhisperer", description: "AI coding companion with security scanning features", link: "https://aws.amazon.com/codewhisperer/" },
+      { name: "Tabnine", description: "Code completion assistant with multiple language support", link: "https://www.tabnine.com/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different text options", node: "text" }
+    ]
+  },
+
+  // Image section with subcategories
+  image: {
+    title: "What do you want to do with images?",
+    options: [
+      { text: "Generate brand new images", node: "generate_image" },
+      { text: "Edit or enhance existing images", node: "edit_image" },
+      { text: "Create diagrams or designs", node: "design_image" }
+    ]
+  },
+
+  generate_image: {
+    title: "Image Generation Tools",
+    description: "Create original images from text prompts:",
+    tools: [
+      { name: "Ideogram", description: "AI image generator with strong text rendering capabilities", link: "https://ideogram.ai/" },
+      { name: "Leonardo.Ai", description: "Powerful image generation with customization options", link: "https://leonardo.ai/" },
+      { name: "Midjourney", description: "Discord-based image generator known for artistic quality", link: "https://www.midjourney.com/" },
+      { name: "DALL-E (via ChatGPT)", description: "OpenAI's image generator integrated with ChatGPT", link: "https://chat.openai.com/" },
+      { name: "Gemini", description: "Google's multimodal AI with image generation capabilities", link: "https://gemini.google.com/" },
+      { name: "Flux AI", description: "New AI image generator with advanced capabilities", link: "https://flux.ai/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different image options", node: "image" }
+    ]
+  },
+
+  edit_image: {
+    title: "Image Editing Tools",
+    description: "Edit, enhance, or modify existing images:",
+    tools: [
+      { name: "Adobe Firefly", description: "Creative generative AI integrated with Adobe products", link: "https://www.adobe.com/products/firefly.html" },
+      { name: "Canva AI", description: "User-friendly design platform with AI editing features", link: "https://www.canva.com/" },
+      { name: "Krea", description: "AI image editing with intuitive interface", link: "https://www.krea.ai/" },
+      { name: "Luminar Neo", description: "Photo editor with AI-powered enhancement tools", link: "https://skylum.com/luminar" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different image options", node: "image" }
+    ]
+  },
+
+  design_image: {
+    title: "AI Design Tools",
+    description: "Create diagrams, designs, and visual assets:",
+    tools: [
+      { name: "Microsoft Designer", description: "AI-powered design tool for various visual content", link: "https://designer.microsoft.com/" },
+      { name: "Diagram", description: "Create professional diagrams and flowcharts with AI", link: "https://diagram.com/" },
+      { name: "Uizard", description: "Turn sketches into digital designs with AI", link: "https://uizard.io/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different image options", node: "image" }
+    ]
+  },
+
+  // Video section with subcategories
+  video: {
+    title: "What kind of video content do you need?",
+    options: [
+      { text: "Generate video from text", node: "text_to_video" },
+      { text: "Edit existing videos", node: "edit_video" },
+      { text: "Create animated characters", node: "character_video" }
+    ]
+  },
+
+  text_to_video: {
+    title: "Text-to-Video Generation Tools",
+    description: "Create videos directly from text prompts:",
+    tools: [
+      { name: "Runway ML", description: "Professional video generation with advanced controls", link: "https://runwayml.com/" },
+      { name: "Pika", description: "User-friendly video generation from text or images", link: "https://pika.art/" },
+      { name: "Sora", description: "OpenAI's text-to-video model (limited access)", link: "https://openai.com/sora" },
+      { name: "Luma Labs", description: "AI video generation tools for creative professionals", link: "https://lumalabs.ai/" },
+      { name: "Synthesys", description: "Text-to-video platform with multiple creative options", link: "https://synthesys.io/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different video options", node: "video" }
+    ]
+  },
+
+  edit_video: {
+    title: "AI Video Editing Tools",
+    description: "Edit and enhance existing video content:",
+    tools: [
+      { name: "Descript", description: "Text-based video editor with AI features", link: "https://www.descript.com/" },
+      { name: "Runway ML", description: "AI video editing with advanced effects", link: "https://runwayml.com/" },
+      { name: "Kapwing", description: "Online video editor with AI assistance", link: "https://www.kapwing.com/" },
+      { name: "Pictory", description: "Automatically create short videos from long-form content", link: "https://pictory.ai/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different video options", node: "video" }
+    ]
+  },
+
+  character_video: {
+    title: "AI Character Animation Tools",
+    description: "Create animated characters and avatars:",
+    tools: [
+      { name: "D-ID", description: "Create talking avatars from still images", link: "https://www.d-id.com/" },
+      { name: "Synthesia", description: "AI video generation with virtual presenters", link: "https://www.synthesia.io/" },
+      { name: "HeyGen", description: "Create AI videos with virtual presenters", link: "https://www.heygen.com/" },
+      { name: "Hour One", description: "AI-generated human presenters for video content", link: "https://hourone.ai/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different video options", node: "video" }
     ]
   },
 
   presentations: {
-    title: "Educational Presentations & Visual Materials",
-    description: "Design engaging presentations and visual learning materials:",
+    title: "AI Presentation Tools",
+    description: "Create and enhance presentations:",
     tools: [
-      { 
-        name: "Gamma App", 
-        description: "AI-powered presentation creator perfect for educational content - automatically designs professional slides from your content outline",
-        category: "Presentations",
-        link: "https://gamma.app/",
-        tasks: ["Auto-design slides", "Educational templates", "Interactive content"]
-      },
-      { 
-        name: "Beautiful AI", 
-        description: "Smart design-focused presentation tool that ensures your educational content looks professional and engaging",
-        category: "Presentations",
-        link: "https://www.beautiful.ai/",
-        tasks: ["Professional design", "Template library", "Brand consistency"]
-      },
-      { 
-        name: "Pitch", 
-        description: "Collaborative platform perfect for team-created educational presentations with real-time editing and feedback",
-        category: "Presentations",
-        link: "https://pitch.com/",
-        tasks: ["Team collaboration", "Real-time editing", "Feedback integration"]
-      },
-      { 
-        name: "Tome", 
-        description: "Narrative-driven presentation format ideal for storytelling in education and creating engaging learning experiences",
-        category: "Presentations",
-        link: "https://tome.app/",
-        tasks: ["Storytelling", "Narrative structure", "Interactive elements"]
-      },
-      { 
-        name: "SlidesAI", 
-        description: "Generate complete presentations from just a topic or outline - perfect for quick lecture creation",
-        category: "Presentations",
-        link: "https://www.slidesai.io/",
-        tasks: ["Quick generation", "Topic-based creation", "Outline expansion"]
-      },
-      { 
-        name: "Canva", 
-        description: "Create educational posters, infographics, and visual aids with AI-powered design suggestions and educational templates",
-        category: "Presentations",
-        link: "https://www.canva.com/",
-        tasks: ["Infographics", "Educational posters", "Visual aids"]
-      }
+      { name: "Gamma App", description: "AI-powered presentation creator with modern designs", link: "https://gamma.app/" },
+      { name: "Beautiful.AI", description: "Create professional presentations with AI design assistance", link: "https://www.beautiful.ai/" },
+      { name: "Pitch", description: "Collaborative presentation platform with AI features", link: "https://pitch.com/" },
+      { name: "Tome", description: "AI-powered storytelling format for presentations", link: "https://tome.app/" },
+      { name: "SlidesAI", description: "Generate entire presentations from text prompts", link: "https://www.slidesai.io/" },
+      { name: "Microsoft Designer", description: "AI design tool with presentation capabilities", link: "https://designer.microsoft.com/" }
     ],
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" },
-      { text: "📊 Create Assessments", node: "assessments" }
+      { text: "Start over", node: "start" }
     ]
   },
 
-  assessments: {
-    title: "Assessments & Rubrics Creation",
-    description: "Design fair, comprehensive assessments and detailed rubrics:",
+  documents: {
+    title: "Document Analysis and Research Tools",
+    description: "Tools for analyzing and working with documents:",
     tools: [
-      { 
-        name: "ChatGPT 4o mini (free)", 
-        description: "Create quiz questions, exam prompts, rubrics, and assessment criteria aligned with your learning objectives",
-        category: "Generative AI",
-        link: "https://chat.openai.com/",
-        tasks: ["Quiz generation", "Rubric creation", "Assessment alignment"]
-      },
-      { 
-        name: "Claude.AI", 
-        description: "Excellent for creating detailed rubrics, assessment matrices, and ensuring fair evaluation criteria across different skill levels",
-        category: "Generative AI",
-        link: "https://claude.ai/",
-        tasks: ["Detailed rubrics", "Fair criteria", "Skill-level alignment"]
-      },
-      { 
-        name: "Copilot", 
-        description: "Generate assessment documents in Word, create grade tracking sheets in Excel, and develop comprehensive evaluation frameworks",
-        category: "Generative AI",
-        link: "https://copilot.microsoft.com/",
-        tasks: ["Document creation", "Grade tracking", "Framework development"]
-      },
-      { 
-        name: "Gemini", 
-        description: "Create diverse question types, including visual assessments, and generate multiple assessment versions for academic integrity",
-        category: "Generative AI",
-        link: "https://gemini.google.com/",
-        tasks: ["Question variety", "Visual assessments", "Multiple versions"]
-      }
+      { name: "NotebookLM", description: "Google's tool for note-taking and document analysis", link: "https://notebooklm.google.com/" },
+      { name: "Elicit", description: "AI research assistant that helps with literature review", link: "https://elicit.org/" },
+      { name: "Perplexity", description: "AI search engine that provides cited answers", link: "https://www.perplexity.ai/" },
+      { name: "Consensus", description: "AI tool for searching and analyzing scientific papers", link: "https://consensus.app/" },
+      { name: "Qdrant", description: "Vector database for document search and analysis", link: "https://qdrant.tech/" }
     ],
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" },
-      { text: "🔍 Research Tools", node: "research" }
+      { text: "Start over", node: "start" }
     ]
   },
 
-  research: {
-    title: "Research & OER Content Creation",
-    description: "Find reliable sources, create OER materials, and conduct educational research:",
+  audio: {
+    title: "AI Audio Tools",
+    description: "Generate and enhance audio content:",
     tools: [
-      { 
-        name: "Perplexity", 
-        description: "AI-powered search with real-time sources - perfect for finding current research, statistics, and credible information for your content",
-        category: "Generative AI",
-        link: "https://www.perplexity.ai/",
-        tasks: ["Current research", "Source verification", "Fact-checking"]
-      },
-      { 
-        name: "You.com", 
-        description: "Search engine with built-in AI chat - great for research while creating content, finding OER materials, and academic resources",
-        category: "Generative AI",
-        link: "https://you.com/",
-        tasks: ["Academic search", "OER discovery", "Resource compilation"]
-      },
-      { 
-        name: "Claude.AI", 
-        description: "Analyze research papers, synthesize information from multiple sources, and create comprehensive literature reviews",
-        category: "Generative AI",
-        link: "https://claude.ai/",
-        tasks: ["Paper analysis", "Information synthesis", "Literature reviews"]
-      },
-      { 
-        name: "Gemini", 
-        description: "Research across multiple formats, analyze images and documents, and create multimedia OER content",
-        category: "Generative AI",
-        link: "https://gemini.google.com/",
-        tasks: ["Multimedia research", "Document analysis", "OER creation"]
-      }
+      { name: "ElevenLabs", description: "High-quality AI voice generation and cloning", link: "https://elevenlabs.io/" },
+      { name: "Descript", description: "Audio editing with text-based interface", link: "https://www.descript.com/" },
+      { name: "Murf.ai", description: "AI voice generator for various applications", link: "https://murf.ai/" },
+      { name: "Play.ht", description: "Convert text to natural-sounding speech", link: "https://play.ht/" },
+      { name: "Soundraw", description: "AI music generation for content creators", link: "https://soundraw.io/" },
+      { name: "AIVA", description: "AI composer for emotional soundtrack music", link: "https://www.aiva.ai/" }
     ],
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" },
-      { text: "🎬 Create Videos", node: "videos" }
+      { text: "Start over", node: "start" }
     ]
   },
 
-  videos: {
-    title: "Educational Video Production",
-    description: "Create engaging educational videos and multimedia content:",
-    tools: [
-      { 
-        name: "Visla", 
-        description: "AI-powered video editing and creation platform perfect for educational content with automated editing features",
-        category: "Video Creation",
-        link: "https://www.visla.us/",
-        tasks: ["Auto editing", "Educational templates", "Content repurposing"]
-      },
-      { 
-        name: "Pika", 
-        description: "Generate realistic educational videos from text prompts - great for creating visual explanations and demonstrations",
-        category: "Video Creation",
-        link: "https://pika.art/",
-        tasks: ["Text-to-video", "Visual explanations", "Concept demonstrations"]
-      },
-      { 
-        name: "InVideo", 
-        description: "Templates and AI editing specifically designed for educational and training videos with easy customization",
-        category: "Video Creation",
-        link: "https://invideo.io/",
-        tasks: ["Educational templates", "Training videos", "Easy customization"]
-      },
-      { 
-        name: "Synthesia", 
-        description: "Create videos with AI presenters - perfect for consistent educational content delivery and multilingual materials",
-        category: "Video Creation",
-        link: "https://www.synthesia.io/",
-        tasks: ["AI presenters", "Consistent delivery", "Multilingual content"]
-      },
-      { 
-        name: "HeyGen", 
-        description: "AI avatar creation for educational videos - great for personalized instruction and engaging student presentations",
-        category: "Video Creation",
-        link: "https://www.heygen.com/",
-        tasks: ["Avatar creation", "Personalized instruction", "Student engagement"]
-      }
-    ],
+  organization: {
+    title: "What type of organization do you work in?",
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" },
-      { text: "🤖 General AI Tools", node: "general_ai" }
+      { text: "Defense or Government Agency", node: "defense" },
+      { text: "Education/Research", node: "education" }
     ]
   },
 
-  general_ai: {
-    title: "General AI Platforms for Education",
-    description: "Versatile AI tools for various educational tasks and creative projects:",
+  defense: {
+    title: "Security and Compliance Tools for Government",
+    description: "Specialized tools for government and defense environments:",
     tools: [
-      { 
-        name: "ChatGPT 4o mini (free)", 
-        description: "The most versatile educational AI - perfect for lesson planning, content creation, student support, and administrative tasks",
-        category: "Generative AI",
-        link: "https://chat.openai.com/",
-        tasks: ["Lesson planning", "Student support", "Content creation", "Admin tasks"]
-      },
-      { 
-        name: "Claude.AI", 
-        description: "Excellent reasoning and analysis - great for complex educational challenges, policy development, and detailed content review",
-        category: "Generative AI",
-        link: "https://claude.ai/",
-        tasks: ["Complex analysis", "Policy development", "Content review"]
-      },
-      { 
-        name: "Copilot", 
-        description: "Seamlessly integrated with Microsoft Office tools - essential for educators using Word, PowerPoint, Excel, and Teams",
-        category: "Generative AI",
-        link: "https://copilot.microsoft.com/",
-        tasks: ["Office integration", "Document creation", "Team collaboration"]
-      },
-      { 
-        name: "Gemini", 
-        description: "Google's multimodal AI - perfect for Google Workspace users, handling text, images, and integration with Drive and Classroom",
-        category: "Generative AI",
-        link: "https://gemini.google.com/",
-        tasks: ["Google integration", "Multimodal tasks", "Classroom management"]
-      },
-      { 
-        name: "Poe", 
-        description: "Access multiple AI models in one platform - great for comparing outputs and finding the best AI for specific educational tasks",
-        category: "Generative AI",
-        link: "https://poe.com/",
-        tasks: ["Model comparison", "Diverse perspectives", "Task optimization"]
-      }
+      { name: "AskSage", description: "Government secure AI platform with IL5 authorization", link: "https://www.asksage.ai/" },
+      { name: "Copilot for Government", description: "Microsoft's AI assistant built for government compliance", link: "https://www.microsoft.com/en-us/microsoft-365/government/microsoft-365-copilot-for-government" },
+      { name: "Google Workspace with Gemini for Government", description: "Google's secure AI features for government use", link: "https://workspace.google.com/industries/government/" }
     ],
     options: [
-      { text: "🏠 Back to Main Menu", node: "start" }
+      { text: "Start over", node: "start" },
+      { text: "Explore different options", node: "organization" }
+    ]
+  },
+
+  education: {
+    title: "Education and Research Tools",
+    description: "AI tools tailored for educational environments:",
+    tools: [
+      { name: "Century", description: "AI learning platform for personalized education", link: "https://www.century.tech/" },
+      { name: "Gradescope", description: "AI-assisted grading and assessment tool", link: "https://www.gradescope.com/" },
+      { name: "Elicit", description: "Research assistant for literature review", link: "https://elicit.org/" }
+    ],
+    options: [
+      { text: "Start over", node: "start" },
+      { text: "Explore different options", node: "organization" }
     ]
   }
 };
+
+export default toolNodes;
