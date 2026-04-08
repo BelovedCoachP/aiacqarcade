@@ -7,20 +7,15 @@
 
 /* Apply a nice font */
 body {
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background-color: #0f0c29; /* fallback for gradient */
-  background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  background-color: #0a0a1a;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(88, 28, 135, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(30, 64, 175, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0a1a 0%, #111133 50%, #0a0a1a 100%);
   min-height: 100vh;
-  color: white;
+  color: #f0f0f5;
   overflow-x: hidden;
-}
-
-/* Center everything nicely */
-.App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Smooth text rendering */
@@ -28,4 +23,41 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Skip-to-content link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #7c3aed;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  z-index: 10000;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 3px solid #a78bfa;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

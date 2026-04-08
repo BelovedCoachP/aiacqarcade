@@ -3,291 +3,627 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0f0c29" />
-    <meta name="description" content="AI Arcade Finder - Neon-powered AI tool explorer!" />
-    <title>AI Arcade Finder 🎮✨</title>
+    <meta name="theme-color" content="#0a0a1a" />
+    <meta name="description" content="AI Arcade Finder by LearnAILD - Discover the best AI tools for any task." />
+    <title>AI Arcade Finder | LearnAILD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
     <!-- React and React DOM -->
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <!-- Babel for JSX transpilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-      /* Reset and base styles */
-      * {
+      /* ═══ Reset & Base ═══ */
+      *, *::before, *::after {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-      
+
       body, html {
         width: 100%;
         height: 100%;
         overflow-x: hidden;
-        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-        background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
-        color: white;
-      }
-      
-      /* Animations */
-      @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.8; }
-        100% { opacity: 1; }
+        font-family: 'Inter', 'Roboto', 'Helvetica', sans-serif;
+        background: #0a0a1a;
+        color: #f0f0f5;
       }
 
-      @keyframes glow {
-        0% { box-shadow: 0 0 10px rgba(34,197,94,0.5); }
-        50% { box-shadow: 0 0 20px rgba(34,197,94,0.7); }
-        100% { box-shadow: 0 0 10px rgba(34,197,94,0.5); }
+      body {
+        background-image:
+          radial-gradient(ellipse at 20% 50%, rgba(88, 28, 135, 0.12) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 20%, rgba(30, 64, 175, 0.10) 0%, transparent 50%),
+          linear-gradient(180deg, #0a0a1a 0%, #111133 50%, #0a0a1a 100%);
       }
-      
-      /* Main container styles */
+
+      /* ═══ Skip Link ═══ */
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #7c3aed;
+        color: #ffffff;
+        padding: 12px 24px;
+        border-radius: 0 0 8px 8px;
+        font-weight: 600;
+        z-index: 10000;
+        text-decoration: none;
+        transition: top 0.2s;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+
+      /* ═══ Focus Visible ═══ */
+      :focus-visible {
+        outline: 3px solid #a78bfa;
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      /* ═══ Reduced Motion ═══ */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* ═══ Animations ═══ */
+      @keyframes splashFadeIn {
+        0% { opacity: 0; transform: scale(0.9); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+
+      @keyframes splashFadeOut {
+        0% { opacity: 1; }
+        100% { opacity: 0; visibility: hidden; }
+      }
+
+      @keyframes glowPulse {
+        0%, 100% { box-shadow: 0 0 15px rgba(139, 92, 246, 0.3), 0 0 30px rgba(139, 92, 246, 0.1); }
+        50% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.5), 0 0 50px rgba(139, 92, 246, 0.2); }
+      }
+
+      @keyframes titleGlow {
+        0%, 100% { text-shadow: 0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(168, 85, 247, 0.3); }
+        50% { text-shadow: 0 0 30px rgba(168, 85, 247, 0.8), 0 0 60px rgba(168, 85, 247, 0.4); }
+      }
+
+      @keyframes scanline {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100vh); }
+      }
+
+      @keyframes gridFade {
+        0% { opacity: 0.03; }
+        50% { opacity: 0.06; }
+        100% { opacity: 0.03; }
+      }
+
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ═══ Splash Screen ═══ */
+      .splash-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background:
+          radial-gradient(ellipse at center, rgba(88, 28, 135, 0.25) 0%, transparent 70%),
+          #0a0a1a;
+        animation: splashFadeIn 0.6s ease-out;
+      }
+      .splash-overlay.fade-out {
+        animation: splashFadeOut 0.5s ease-in forwards;
+      }
+      .splash-brand {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(2rem, 7vw, 4.5rem);
+        font-weight: 900;
+        color: #c084fc;
+        text-shadow: 0 0 30px rgba(192, 132, 252, 0.6), 0 0 60px rgba(139, 92, 246, 0.3);
+        letter-spacing: 0.15em;
+        margin-bottom: 12px;
+      }
+      .splash-sub {
+        font-family: 'Inter', sans-serif;
+        font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+        font-weight: 500;
+        color: #d4d4e8;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+      }
+      .splash-bar {
+        margin-top: 32px;
+        width: 180px;
+        height: 3px;
+        background: rgba(139, 92, 246, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .splash-bar-inner {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #7c3aed, #c084fc);
+        border-radius: 3px;
+        transition: width 1.8s ease-out;
+      }
+      .splash-bar-inner.filling {
+        width: 100%;
+      }
+
+      /* ═══ Background Effects ═══ */
+      .bg-grid {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+        animation: gridFade 8s infinite;
+      }
+      .bg-scanline {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .bg-scanline::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 200px;
+        background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.03), transparent);
+        animation: scanline 6s linear infinite;
+      }
+
+      /* ═══ Layout ═══ */
       .container {
+        position: relative;
+        z-index: 1;
         width: 100%;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding: 20px;
+        padding: 24px 16px 60px;
       }
-      
       .content-box {
         width: 100%;
-        max-width: 800px;
+        max-width: 860px;
         margin: 0 auto;
       }
-      
-      /* Header styles */
+
+      /* ═══ Header ═══ */
       .header {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 30px;
+        text-align: center;
+        margin-bottom: 28px;
         width: 100%;
       }
-      
+      .header-brand {
+        font-family: 'Orbitron', monospace;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #a78bfa;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
       .title {
-        font-size: 4rem;
-        font-weight: bold;
-        color: #ec4899;
-        text-align: center;
-        animation: pulse 2s infinite;
-        text-shadow: 0 0 15px rgba(236,72,153,0.7), 0 0 25px rgba(236,72,153,0.5);
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 900;
+        color: #e0d0ff;
+        animation: titleGlow 4s ease-in-out infinite;
+        letter-spacing: 0.08em;
       }
-      
-      /* Card styles */
+
+      /* ═══ Main Card ═══ */
       .main-card {
-        background-color: rgba(17, 24, 39, 0.8);
-        border: 2px solid #3b82f6;
-        border-radius: 12px;
-        padding: 30px;
-        box-shadow: 0 0 20px #3b82f6;
+        background: rgba(15, 15, 35, 0.85);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 16px;
+        padding: 32px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        animation: glowPulse 6s ease-in-out infinite;
         width: 100%;
       }
-      
-      .card-title {
-        font-size: 1.75rem;
-        font-weight: bold;
-        color: #93c5fd;
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
         margin-bottom: 20px;
-        text-align: center;
+        flex-wrap: wrap;
       }
-      
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #e0d0ff;
+        flex: 1;
+        min-width: 0;
+      }
+      .card-nav {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
       .card-description {
-        color: #dbeafe;
-        margin-bottom: 25px;
-        font-size: 1.1rem;
-        text-align: center;
+        color: #d4d4e8;
+        margin-bottom: 24px;
+        font-size: 1.05rem;
+        line-height: 1.6;
       }
-      
-      /* Button styles */
+
+      /* ═══ Option Buttons ═══ */
       .button-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 12px;
         width: 100%;
       }
-      
       .glow-button {
-        background: transparent;
-        border: 2px solid #22c55e;
-        color: #22c55e;
-        padding: 15px;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 1.1rem;
-        box-shadow: 0 0 12px rgba(34,197,94,0.5);
+        background: rgba(139, 92, 246, 0.08);
+        border: 1.5px solid rgba(139, 92, 246, 0.4);
+        color: #d4bfff;
+        padding: 16px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.05rem;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.25s ease;
         width: 100%;
-        text-align: center;
-        animation: glow 3s infinite;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
       }
-      
-      .glow-button:hover {
-        color: white;
-        border-color: #16a34a;
-        box-shadow: 0 0 20px rgba(34,197,94,0.7);
-        transform: translateY(-2px);
-        animation: none;
+      .glow-button::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), transparent);
+        opacity: 0;
+        transition: opacity 0.25s;
       }
-      
-      /* Search input styles */
+      .glow-button:hover::before,
+      .glow-button:focus-visible::before {
+        opacity: 1;
+      }
+      .glow-button:hover,
+      .glow-button:focus-visible {
+        border-color: #a78bfa;
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        transform: translateY(-1px);
+      }
+      .glow-button:focus-visible {
+        outline: 3px solid #a78bfa;
+        outline-offset: 2px;
+      }
+
+      /* ═══ Search ═══ */
+      .search-wrapper {
+        position: relative;
+        margin-bottom: 20px;
+      }
+      .search-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #a78bfa;
+        margin-bottom: 6px;
+      }
       .search-input {
         width: 100%;
-        padding: 12px 15px;
-        border-radius: 6px;
-        border: 2px solid #60a5fa;
-        font-size: 1rem;
-        margin-bottom: 25px;
-        background-color: rgba(255, 255, 255, 0.9);
-      }
-      
-      /* Tool cards */
-      .tool-card {
-        border: 2px solid #60a5fa;
-        background-color: rgba(17, 24, 39, 0.7);
-        padding: 20px;
+        padding: 12px 16px 12px 42px;
         border-radius: 10px;
-        box-shadow: 0 0 12px rgba(96,165,250,0.3);
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
+        border: 1.5px solid rgba(139, 92, 246, 0.3);
+        font-size: 1rem;
+        background: rgba(15, 15, 35, 0.8);
+        color: #f0f0f5;
+        font-family: inherit;
+        transition: border-color 0.2s, box-shadow 0.2s;
       }
-      
+      .search-input::placeholder {
+        color: #8888aa;
+      }
+      .search-input:focus {
+        border-color: #a78bfa;
+        box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+      }
+      .search-icon {
+        position: absolute;
+        left: 14px;
+        bottom: 13px;
+        color: #8888aa;
+        pointer-events: none;
+        font-size: 1rem;
+      }
+
+      /* ═══ Tool Cards ═══ */
+      .tool-card {
+        background: rgba(20, 20, 45, 0.7);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+        transition: all 0.25s ease;
+        animation: slideUp 0.3s ease-out backwards;
+      }
       .tool-card:hover {
-        border-color: #ec4899;
-        box-shadow: 0 0 15px rgba(236,72,153,0.5);
+        border-color: rgba(168, 85, 247, 0.5);
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
         transform: translateY(-2px);
       }
-      
       .tool-title {
-        color: #60a5fa;
-        font-size: 1.3rem;
-        font-weight: bold;
-        margin-bottom: 10px;
+        color: #c4b5fd;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 6px;
       }
-      
       .tool-description {
-        color: #dbeafe;
-        margin-bottom: 15px;
-        font-size: 1rem;
+        color: #d4d4e8;
+        margin-bottom: 14px;
+        font-size: 0.95rem;
+        line-height: 1.5;
       }
-      
-      .tool-link {
-        color: #4ade80;
-        font-weight: bold;
-        text-decoration: none;
-        font-size: 1.05rem;
-        display: inline-block;
-        padding: 5px 0;
-      }
-      
-      .tool-link:hover {
-        color: #a7f3d0;
-        text-decoration: underline;
-      }
-
-      /* Back button specific styling */
-      .back-button {
-        background: transparent;
-        border: 2px solid #60a5fa;
-        color: #60a5fa;
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 1rem;
-        box-shadow: 0 0 10px rgba(96,165,250,0.5);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-bottom: 20px;
-        text-align: center;
-        display: inline-block;
-      }
-      
-      .back-button:hover {
-        color: white;
-        border-color: #3b82f6;
-        box-shadow: 0 0 15px rgba(96,165,250,0.7);
-      }
-      
-      /* Bottom navigation buttons */
-      .bottom-nav {
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(96,165,250,0.3);
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-      }
-      
-      .nav-button {
-        background: transparent;
-        border: 2px solid #8b5cf6;
-        color: #8b5cf6;
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 1rem;
-        box-shadow: 0 0 10px rgba(139,92,246,0.5);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-      }
-      
-      .nav-button:hover {
-        color: white;
-        border-color: #7c3aed;
-        box-shadow: 0 0 15px rgba(139,92,246,0.7);
-      }
-      
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .title {
-          font-size: 2.5rem;
-        }
-        
-        .card-title {
-          font-size: 1.4rem;
-        }
-        
-        .main-card {
-          padding: 20px;
-        }
-        
-        .glow-button {
-          padding: 12px;
-          font-size: 1rem;
-        }
-        
-        .bottom-nav {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* Utility classes */
-      .flex {
+      .tool-actions {
         display: flex;
-      }
-      .justify-between {
         justify-content: space-between;
-      }
-      .items-center {
         align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
       }
-      .mb-6 {
-        margin-bottom: 1.5rem;
+      .tool-link {
+        color: #a78bfa;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.95rem;
+        padding: 6px 0;
+        border-bottom: 1.5px solid transparent;
+        transition: all 0.2s;
       }
-      .space-x-4 > * + * {
-        margin-left: 1rem;
+      .tool-link:hover,
+      .tool-link:focus-visible {
+        color: #c4b5fd;
+        border-bottom-color: #a78bfa;
+      }
+      .tool-link:focus-visible {
+        outline: 3px solid #a78bfa;
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+
+      /* ═══ Small Buttons (Back, Nav, Save, Remove) ═══ */
+      .btn-sm {
+        background: transparent;
+        border: 1.5px solid rgba(139, 92, 246, 0.4);
+        color: #c4b5fd;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+        font-family: inherit;
+      }
+      .btn-sm:hover,
+      .btn-sm:focus-visible {
+        border-color: #a78bfa;
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(139, 92, 246, 0.25);
+      }
+      .btn-sm:focus-visible {
+        outline: 3px solid #a78bfa;
+        outline-offset: 2px;
+      }
+      .btn-sm.saved {
+        border-color: rgba(52, 211, 153, 0.5);
+        color: #6ee7b7;
+        cursor: default;
+      }
+      .btn-sm.saved:hover {
+        box-shadow: none;
+        transform: none;
+      }
+      .btn-sm.btn-danger {
+        border-color: rgba(239, 68, 68, 0.4);
+        color: #fca5a5;
+      }
+      .btn-sm.btn-danger:hover,
+      .btn-sm.btn-danger:focus-visible {
+        border-color: #ef4444;
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+      }
+      .btn-export {
+        background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(52, 211, 153, 0.05));
+        border: 1.5px solid rgba(52, 211, 153, 0.4);
+        color: #6ee7b7;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+      }
+      .btn-export:hover,
+      .btn-export:focus-visible {
+        border-color: #34d399;
+        color: #ffffff;
+        box-shadow: 0 0 15px rgba(52, 211, 153, 0.25);
+      }
+      .btn-export:focus-visible {
+        outline: 3px solid #34d399;
+        outline-offset: 2px;
+      }
+
+      /* ═══ Bottom Nav ═══ */
+      .bottom-nav {
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(139, 92, 246, 0.15);
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .bottom-nav .btn-sm {
+        flex: 1;
+        min-width: 140px;
+        text-align: center;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+      }
+
+      /* ═══ Favorites Panel ═══ */
+      .favorites-panel {
+        margin-top: 28px;
+        background: rgba(15, 15, 35, 0.85);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 16px;
+        padding: 24px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .favorites-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .favorites-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #e0d0ff;
+      }
+      .favorites-count {
+        font-size: 0.85rem;
+        color: #a78bfa;
+        font-weight: 600;
+      }
+      .favorites-list {
+        list-style: none;
+        padding: 0;
+      }
+      .favorites-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        gap: 12px;
+      }
+      .favorites-item:last-child {
+        border-bottom: none;
+      }
+      .favorites-item-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .favorites-item-name {
+        color: #d4d4e8;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .favorites-item-cat {
+        color: #8888aa;
+        font-size: 0.8rem;
+        margin-top: 2px;
+      }
+      .favorites-empty {
+        color: #8888aa;
+        font-size: 0.95rem;
+        text-align: center;
+        padding: 16px 0;
+      }
+
+      /* ═══ Live Region (SR only) ═══ */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* ═══ No Results ═══ */
+      .no-results {
+        text-align: center;
+        color: #d4d4e8;
+        padding: 24px 0;
+        font-size: 0.95rem;
+      }
+
+      /* ═══ Responsive ═══ */
+      @media (max-width: 640px) {
+        .main-card {
+          padding: 20px 16px;
+        }
+        .card-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .card-nav {
+          justify-content: flex-start;
+        }
+        .card-title {
+          font-size: 1.25rem;
+        }
+        .glow-button {
+          padding: 14px 16px;
+          font-size: 0.95rem;
+        }
+        .bottom-nav .btn-sm {
+          flex-basis: 100%;
+        }
+        .tool-actions {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
       }
     </style>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div> <!-- React injects here -->
-    
+    <div id="root"></div>
+
     <script type="text/babel">
-      // Complete toolNodes object
+      // ════════════════════════════════════════════
+      //  Tool Data (inline copy — matches toolNodes.js)
+      // ════════════════════════════════════════════
       const toolNodes = {
         start: {
           title: "What do you want to create with AI?",
@@ -298,11 +634,12 @@
             { text: "Build presentations", node: "presentations" },
             { text: "Analyze documents and research", node: "documents" },
             { text: "Generate or enhance audio", node: "audio" },
-            { text: "Help me find tools for Government or Education", node: "organization" }
+            { text: "Accessibility and UDL tools", node: "accessibility" },
+            { text: "AI coding assistants", node: "coding" },
+            { text: "Research and citation tools", node: "research" },
+            { text: "Tools for Government or Education", node: "organization" }
           ]
         },
-
-        // Text section with subcategories
         text: {
           title: "What type of text do you want to generate?",
           options: [
@@ -312,69 +649,66 @@
             { text: "Code and programming assistance", node: "code_text" }
           ]
         },
-
         general_text: {
           title: "General Text Generation Tools",
           description: "These tools can help with everyday writing tasks and brainstorming:",
           tools: [
-            { name: "ChatGPT (Free version)", description: "Versatile AI assistant for various text generation needs", link: "https://chat.openai.com/" },
-            { name: "Claude.AI", description: "Anthropic's conversational AI with strong reasoning capabilities", link: "https://claude.ai/" },
-            { name: "Gemini", description: "Google's multimodal AI that can process text, images, and more", link: "https://gemini.google.com/" },
-            { name: "You.com", description: "AI search that combines web results with generative responses", link: "https://you.com/" },
-            { name: "Mistral", description: "Open-weight AI model with powerful language capabilities", link: "https://mistral.ai/" }
+            { name: "ChatGPT (GPT-4o / o3)", description: "OpenAI's flagship assistant featuring GPT-4o multimodal and o3 advanced reasoning models", link: "https://chat.openai.com/", category: "Text Generation" },
+            { name: "Claude (Opus 4.6 / Sonnet 4.5)", description: "Anthropic's frontier AI with deep reasoning, long-context support, and coding strength", link: "https://claude.ai/", category: "Text Generation" },
+            { name: "Gemini 2.5 Pro", description: "Google's most capable multimodal model with 1M-token context and strong reasoning", link: "https://gemini.google.com/", category: "Text Generation" },
+            { name: "You.com", description: "AI search engine combining web results with generative responses and citations", link: "https://you.com/", category: "Text Generation" },
+            { name: "Mistral Large", description: "Open-weight European AI model with strong multilingual and coding capabilities", link: "https://mistral.ai/", category: "Text Generation" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different text options", node: "text" }
           ]
         },
-
         specialized_text: {
           title: "Specialized Text Generation Tools",
           description: "These tools excel at specific types of technical content:",
           tools: [
-            { name: "Consensus", description: "Scientific research assistant for exploring academic literature", link: "https://consensus.app/" },
-            { name: "NotebookLM", description: "Google's tool for analyzing and working with source documents", link: "https://notebooklm.google.com/" },
-            { name: "StormAI", description: "Advanced AI system for complex reasoning and specialized knowledge domains", link: "https://www.storm.ai/" },
-            { name: "Perplexity", description: "AI search that provides cited answers from the web", link: "https://www.perplexity.ai/" }
+            { name: "Consensus", description: "AI-powered search engine for peer-reviewed scientific research with evidence-based answers", link: "https://consensus.app/", category: "Text Generation" },
+            { name: "NotebookLM", description: "Google's AI research assistant that analyzes uploaded documents and generates audio overviews", link: "https://notebooklm.google.com/", category: "Text Generation" },
+            { name: "Perplexity", description: "AI search engine providing real-time cited answers with Pro Search deep research mode", link: "https://www.perplexity.ai/", category: "Text Generation" },
+            { name: "Gemini 2.5 Pro (Deep Research)", description: "Google's advanced model with Deep Research mode for multi-step investigation and reports", link: "https://gemini.google.com/", category: "Text Generation" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different text options", node: "text" }
           ]
         },
-
         creative_text: {
           title: "Creative Writing Tools",
           description: "Perfect for fiction, poetry, and creative content:",
           tools: [
-            { name: "Sudowrite", description: "AI writing companion for fiction authors", link: "https://www.sudowrite.com/" },
-            { name: "NovelAI", description: "AI storytelling platform designed for narrative fiction", link: "https://novelai.net/" },
-            { name: "Poe", description: "Platform with multiple AI models for creative explorations", link: "https://poe.com/" },
-            { name: "Grok", description: "X's AI with a personality designed for creative exchanges", link: "https://grok.x.ai/" }
+            { name: "Sudowrite", description: "AI writing companion for fiction authors with story engine and prose enhancement", link: "https://www.sudowrite.com/", category: "Creative Writing" },
+            { name: "NovelAI", description: "AI storytelling platform designed for narrative fiction with custom models", link: "https://novelai.net/", category: "Creative Writing" },
+            { name: "Claude (Opus 4.6)", description: "Anthropic's most creative model, excellent for long-form fiction and nuanced writing", link: "https://claude.ai/", category: "Creative Writing" },
+            { name: "Poe", description: "Platform aggregating multiple AI models for creative exploration and custom bots", link: "https://poe.com/", category: "Creative Writing" },
+            { name: "Grok", description: "xAI's conversational AI with real-time knowledge and a distinctive personality", link: "https://grok.x.ai/", category: "Creative Writing" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different text options", node: "text" }
           ]
         },
-
         code_text: {
           title: "Coding and Programming Tools",
           description: "AI assistance for developers:",
           tools: [
-            { name: "GitHub Copilot", description: "AI pair programmer that integrates with code editors", link: "https://github.com/features/copilot" },
-            { name: "Replit Ghostwriter", description: "AI coding assistant built into the Replit IDE", link: "https://replit.com/ghostwriter" },
-            { name: "Amazon CodeWhisperer", description: "AI coding companion with security scanning features", link: "https://aws.amazon.com/codewhisperer/" },
-            { name: "Tabnine", description: "Code completion assistant with multiple language support", link: "https://www.tabnine.com/" }
+            { name: "GitHub Copilot", description: "AI pair programmer integrated into VS Code, JetBrains, and Neovim with chat and code completion", link: "https://github.com/features/copilot", category: "Coding" },
+            { name: "Claude Code", description: "Anthropic's agentic coding tool for terminal-based development, debugging, and refactoring", link: "https://claude.ai/", category: "Coding" },
+            { name: "Cursor", description: "AI-native code editor built on VS Code with deep codebase understanding and multi-file editing", link: "https://cursor.sh/", category: "Coding" },
+            { name: "Amazon Q Developer", description: "AWS AI coding assistant with security scanning, code transformation, and chat (formerly CodeWhisperer)", link: "https://aws.amazon.com/q/developer/", category: "Coding" },
+            { name: "Replit Agent", description: "AI agent that builds and deploys full-stack apps from natural language prompts", link: "https://replit.com/", category: "Coding" },
+            { name: "Tabnine", description: "Privacy-focused AI code completion with on-premise deployment options", link: "https://www.tabnine.com/", category: "Coding" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different text options", node: "text" }
           ]
         },
-
-        // Image section with subcategories
         image: {
           title: "What do you want to do with images?",
           options: [
@@ -383,374 +717,760 @@
             { text: "Create diagrams or designs", node: "design_image" }
           ]
         },
-
         generate_image: {
           title: "Image Generation Tools",
           description: "Create original images from text prompts:",
           tools: [
-            { name: "Ideogram", description: "AI image generator with strong text rendering capabilities", link: "https://ideogram.ai/" },
-            { name: "Leonardo.Ai", description: "Powerful image generation with customization options", link: "https://leonardo.ai/" },
-            { name: "Midjourney", description: "Discord-based image generator known for artistic quality", link: "https://www.midjourney.com/" },
-            { name: "DALL-E (via ChatGPT)", description: "OpenAI's image generator integrated with ChatGPT", link: "https://chat.openai.com/" },
-            { name: "Gemini", description: "Google's multimodal AI with image generation capabilities", link: "https://gemini.google.com/" },
-            { name: "Flux AI", description: "New AI image generator with advanced capabilities", link: "https://flux.ai/" }
+            { name: "Midjourney", description: "Industry-leading image generator known for stunning artistic quality, now with a web editor", link: "https://www.midjourney.com/", category: "Image Generation" },
+            { name: "DALL-E 3 (via ChatGPT)", description: "OpenAI's image generator integrated into ChatGPT with excellent prompt understanding", link: "https://chat.openai.com/", category: "Image Generation" },
+            { name: "Ideogram 2.0", description: "AI image generator with best-in-class text rendering and typography in images", link: "https://ideogram.ai/", category: "Image Generation" },
+            { name: "Adobe Firefly", description: "Adobe's commercially-safe generative AI trained on licensed content, integrated into Creative Cloud", link: "https://www.adobe.com/products/firefly.html", category: "Image Generation" },
+            { name: "Leonardo.Ai", description: "Powerful image generation platform with fine-tuning, real-time canvas, and style control", link: "https://leonardo.ai/", category: "Image Generation" },
+            { name: "Flux (by Black Forest Labs)", description: "Open-source image generation models with strong quality and customization options", link: "https://blackforestlabs.ai/", category: "Image Generation" },
+            { name: "Gemini (Imagen 3)", description: "Google's image generation via Gemini, powered by Imagen 3 with photorealistic output", link: "https://gemini.google.com/", category: "Image Generation" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different image options", node: "image" }
           ]
         },
-
         edit_image: {
           title: "Image Editing Tools",
           description: "Edit, enhance, or modify existing images:",
           tools: [
-            { name: "Adobe Firefly", description: "Creative generative AI integrated with Adobe products", link: "https://www.adobe.com/products/firefly.html" },
-            { name: "Canva AI", description: "User-friendly design platform with AI editing features", link: "https://www.canva.com/" },
-            { name: "Krea", description: "AI image editing with intuitive interface", link: "https://www.krea.ai/" },
-            { name: "Luminar Neo", description: "Photo editor with AI-powered enhancement tools", link: "https://skylum.com/luminar" }
+            { name: "Adobe Firefly", description: "Generative fill, expand, and recolor tools integrated across Photoshop and Illustrator", link: "https://www.adobe.com/products/firefly.html", category: "Image Editing" },
+            { name: "Canva AI (Magic Studio)", description: "One-click AI tools for background removal, image expansion, text-to-image, and design", link: "https://www.canva.com/", category: "Image Editing" },
+            { name: "Krea", description: "Real-time AI image generation and editing with intuitive visual controls", link: "https://www.krea.ai/", category: "Image Editing" },
+            { name: "Luminar Neo", description: "AI-powered photo editor with portrait enhancement, sky replacement, and lighting tools", link: "https://skylum.com/luminar", category: "Image Editing" },
+            { name: "Clipdrop", description: "AI image cleanup, relighting, upscaling, and background removal by Stability AI", link: "https://clipdrop.co/", category: "Image Editing" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different image options", node: "image" }
           ]
         },
-
         design_image: {
           title: "AI Design Tools",
           description: "Create diagrams, designs, and visual assets:",
           tools: [
-            { name: "Microsoft Designer", description: "AI-powered design tool for various visual content", link: "https://designer.microsoft.com/" },
-            { name: "Diagram", description: "Create professional diagrams and flowcharts with AI", link: "https://diagram.com/" },
-            { name: "Uizard", description: "Turn sketches into digital designs with AI", link: "https://uizard.io/" }
+            { name: "Canva AI", description: "All-in-one design platform with AI-powered templates, layouts, and brand kit integration", link: "https://www.canva.com/", category: "Design" },
+            { name: "Microsoft Designer", description: "AI design tool for social posts, invitations, and visual content using DALL-E", link: "https://designer.microsoft.com/", category: "Design" },
+            { name: "Figma AI", description: "Design platform with AI features for auto-layout, asset search, and prototyping", link: "https://www.figma.com/", category: "Design" },
+            { name: "Uizard", description: "Turn screenshots, sketches, or text prompts into editable digital UI designs", link: "https://uizard.io/", category: "Design" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different image options", node: "image" }
           ]
         },
-
-        // Video section with subcategories
         video: {
           title: "What kind of video content do you need?",
           options: [
             { text: "Generate video from text", node: "text_to_video" },
             { text: "Edit existing videos", node: "edit_video" },
-            { text: "Create animated characters", node: "character_video" }
+            { text: "Create AI avatars and presenters", node: "character_video" }
           ]
         },
-
         text_to_video: {
           title: "Text-to-Video Generation Tools",
           description: "Create videos directly from text prompts:",
           tools: [
-            { name: "Runway ML", description: "Professional video generation with advanced controls", link: "https://runwayml.com/" },
-            { name: "Pika", description: "User-friendly video generation from text or images", link: "https://pika.art/" },
-            { name: "Sora", description: "OpenAI's text-to-video model (limited access)", link: "https://openai.com/sora" },
-            { name: "Luma Labs", description: "AI video generation tools for creative professionals", link: "https://lumalabs.ai/" },
-            { name: "Synthesys", description: "Text-to-video platform with multiple creative options", link: "https://synthesys.io/" }
+            { name: "Sora", description: "OpenAI's video generation model creating realistic scenes up to 60 seconds from text prompts", link: "https://openai.com/sora", category: "Video Generation" },
+            { name: "VEO 3", description: "Google DeepMind's latest video model with native audio generation and cinematic quality", link: "https://deepmind.google/technologies/veo/", category: "Video Generation" },
+            { name: "Runway Gen-3 Alpha", description: "Professional video generation with fine-grained control over motion, style, and camera", link: "https://runwayml.com/", category: "Video Generation" },
+            { name: "Pika 2.0", description: "Accessible video generator with scene modification, lip sync, and special effects", link: "https://pika.art/", category: "Video Generation" },
+            { name: "Luma Dream Machine", description: "Fast, high-quality video generation from text and images with consistent characters", link: "https://lumalabs.ai/", category: "Video Generation" },
+            { name: "Kling AI", description: "Kuaishou's video generation model with strong motion quality and up to 2-minute output", link: "https://klingai.com/", category: "Video Generation" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different video options", node: "video" }
           ]
         },
-
         edit_video: {
           title: "AI Video Editing Tools",
           description: "Edit and enhance existing video content:",
           tools: [
-            { name: "Descript", description: "Text-based video editor with AI features", link: "https://www.descript.com/" },
-            { name: "Runway ML", description: "AI video editing with advanced effects", link: "https://runwayml.com/" },
-            { name: "Kapwing", description: "Online video editor with AI assistance", link: "https://www.kapwing.com/" },
-            { name: "Pictory", description: "Automatically create short videos from long-form content", link: "https://pictory.ai/" }
+            { name: "Descript", description: "Edit video by editing text — AI-powered transcription, filler-word removal, and eye contact correction", link: "https://www.descript.com/", category: "Video Editing" },
+            { name: "Runway ML", description: "AI-powered video editing with inpainting, green screen, motion tracking, and Gen-3 effects", link: "https://runwayml.com/", category: "Video Editing" },
+            { name: "Kapwing", description: "Browser-based video editor with AI auto-subtitles, smart cut, and resize for social media", link: "https://www.kapwing.com/", category: "Video Editing" },
+            { name: "Pictory", description: "Turn long-form content into short branded videos with automatic highlights and captions", link: "https://pictory.ai/", category: "Video Editing" },
+            { name: "OpusClip", description: "AI tool that turns long videos into viral short clips with auto-reframing and captions", link: "https://www.opus.pro/", category: "Video Editing" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different video options", node: "video" }
           ]
         },
-
         character_video: {
-          title: "AI Character Animation Tools",
-          description: "Create animated characters and avatars:",
+          title: "AI Avatar and Presenter Tools",
+          description: "Create AI-generated presenters and talking avatars:",
           tools: [
-            { name: "D-ID", description: "Create talking avatars from still images", link: "https://www.d-id.com/" },
-            { name: "Synthesia", description: "AI video generation with virtual presenters", link: "https://www.synthesia.io/" },
-            { name: "HeyGen", description: "Create AI videos with virtual presenters", link: "https://www.heygen.com/" },
-            { name: "Hour One", description: "AI-generated human presenters for video content", link: "https://hourone.ai/" }
+            { name: "HeyGen", description: "Create professional AI videos with 100+ realistic avatars, instant translation, and voice cloning", link: "https://www.heygen.com/", category: "AI Avatars" },
+            { name: "Synthesia", description: "Enterprise AI video platform with 230+ avatars and 140+ language support", link: "https://www.synthesia.io/", category: "AI Avatars" },
+            { name: "D-ID", description: "Create talking-head videos from a single photo with natural facial animation", link: "https://www.d-id.com/", category: "AI Avatars" },
+            { name: "Colossyan", description: "AI video creation platform focused on workplace learning with diverse avatar options", link: "https://www.colossyan.com/", category: "AI Avatars" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different video options", node: "video" }
           ]
         },
-
         presentations: {
           title: "AI Presentation Tools",
           description: "Create and enhance presentations:",
           tools: [
-            { name: "Gamma App", description: "AI-powered presentation creator with modern designs", link: "https://gamma.app/" },
-            { name: "Beautiful.AI", description: "Create professional presentations with AI design assistance", link: "https://www.beautiful.ai/" },
-            { name: "Pitch", description: "Collaborative presentation platform with AI features", link: "https://pitch.com/" },
-            { name: "Tome", description: "AI-powered storytelling format for presentations", link: "https://tome.app/" },
-            { name: "SlidesAI", description: "Generate entire presentations from text prompts", link: "https://www.slidesai.io/" },
-            { name: "Microsoft Designer", description: "AI design tool with presentation capabilities", link: "https://designer.microsoft.com/" }
+            { name: "Gamma", description: "AI-powered presentation, document, and webpage creator with polished designs from a prompt", link: "https://gamma.app/", category: "Presentations" },
+            { name: "Beautiful.AI", description: "Smart slide design with AI that automatically formats content into professional layouts", link: "https://www.beautiful.ai/", category: "Presentations" },
+            { name: "Canva AI (Presentations)", description: "Design presentations with Magic Design, AI image generation, and brand-consistent templates", link: "https://www.canva.com/presentations/", category: "Presentations" },
+            { name: "Pitch", description: "Collaborative presentation platform with AI drafting, custom templates, and analytics", link: "https://pitch.com/", category: "Presentations" },
+            { name: "Tome", description: "AI storytelling tool that generates narrative-driven presentations from a prompt", link: "https://tome.app/", category: "Presentations" },
+            { name: "SlidesAI", description: "Google Slides add-on that generates entire slide decks from text in seconds", link: "https://www.slidesai.io/", category: "Presentations" },
+            { name: "Microsoft Copilot (PowerPoint)", description: "AI assistant that drafts, designs, and summarizes presentations inside PowerPoint", link: "https://copilot.microsoft.com/", category: "Presentations" }
           ],
           options: [
             { text: "Start over", node: "start" }
           ]
         },
-
         documents: {
           title: "Document Analysis and Research Tools",
           description: "Tools for analyzing and working with documents:",
           tools: [
-            { name: "NotebookLM", description: "Google's tool for note-taking and document analysis", link: "https://notebooklm.google.com/" },
-            { name: "Elicit", description: "AI research assistant that helps with literature review", link: "https://elicit.org/" },
-            { name: "Perplexity", description: "AI search engine that provides cited answers", link: "https://www.perplexity.ai/" },
-            { name: "Consensus", description: "AI tool for searching and analyzing scientific papers", link: "https://consensus.app/" },
-            { name: "Qdrant", description: "Vector database for document search and analysis", link: "https://qdrant.tech/" }
+            { name: "NotebookLM", description: "Google's AI notebook that analyzes your documents and can generate podcast-style audio summaries", link: "https://notebooklm.google.com/", category: "Document Analysis" },
+            { name: "Elicit", description: "AI research assistant that finds relevant papers and extracts key findings from academic literature", link: "https://elicit.org/", category: "Document Analysis" },
+            { name: "Perplexity", description: "AI answer engine with cited sources, Pro Search for deep research, and document upload support", link: "https://www.perplexity.ai/", category: "Document Analysis" },
+            { name: "Consensus", description: "Search engine for peer-reviewed research that synthesizes findings across scientific papers", link: "https://consensus.app/", category: "Document Analysis" },
+            { name: "Claude (Projects)", description: "Upload documents to Claude Projects for persistent analysis, Q&A, and summarization", link: "https://claude.ai/", category: "Document Analysis" }
           ],
           options: [
             { text: "Start over", node: "start" }
           ]
         },
-
         audio: {
           title: "AI Audio Tools",
           description: "Generate and enhance audio content:",
           tools: [
-            { name: "ElevenLabs", description: "High-quality AI voice generation and cloning", link: "https://elevenlabs.io/" },
-            { name: "Descript", description: "Audio editing with text-based interface", link: "https://www.descript.com/" },
-            { name: "Murf.ai", description: "AI voice generator for various applications", link: "https://murf.ai/" },
-            { name: "Play.ht", description: "Convert text to natural-sounding speech", link: "https://play.ht/" },
-            { name: "Soundraw", description: "AI music generation for content creators", link: "https://soundraw.io/" },
-            { name: "AIVA", description: "AI composer for emotional soundtrack music", link: "https://www.aiva.ai/" }
+            { name: "ElevenLabs", description: "Industry-leading AI voice synthesis with voice cloning, dubbing, and sound effects generation", link: "https://elevenlabs.io/", category: "Audio" },
+            { name: "Descript", description: "All-in-one audio/video editor with AI transcription, voice cloning, and filler-word removal", link: "https://www.descript.com/", category: "Audio" },
+            { name: "Otter.ai", description: "AI meeting assistant with real-time transcription, summaries, and action item extraction", link: "https://otter.ai/", category: "Audio" },
+            { name: "Suno", description: "AI music generator that creates full songs with vocals, instruments, and lyrics from text prompts", link: "https://suno.com/", category: "Audio" },
+            { name: "Udio", description: "AI music creation platform producing high-fidelity tracks across genres from text descriptions", link: "https://www.udio.com/", category: "Audio" },
+            { name: "Murf.ai", description: "AI voice generator with 120+ voices for voiceovers, e-learning, and marketing content", link: "https://murf.ai/", category: "Audio" },
+            { name: "Play.ht", description: "Text-to-speech platform with ultra-realistic voices and API for developers", link: "https://play.ht/", category: "Audio" },
+            { name: "Soundraw", description: "AI music generation for content creators with customizable mood, genre, and length", link: "https://soundraw.io/", category: "Audio" },
+            { name: "AIVA", description: "AI composer for emotional soundtrack music used in films, games, and advertisements", link: "https://www.aiva.ai/", category: "Audio" }
           ],
           options: [
             { text: "Start over", node: "start" }
           ]
         },
-
+        accessibility: {
+          title: "What accessibility area do you need help with?",
+          options: [
+            { text: "Captioning and transcription", node: "caption_tools" },
+            { text: "Alt text and image descriptions", node: "alt_text_tools" },
+            { text: "Reading level and language simplification", node: "reading_level_tools" }
+          ]
+        },
+        caption_tools: {
+          title: "AI Captioning and Transcription Tools",
+          description: "Tools for generating captions, subtitles, and transcripts:",
+          tools: [
+            { name: "Otter.ai", description: "Real-time AI transcription for meetings and lectures with speaker identification and summaries", link: "https://otter.ai/", category: "Accessibility" },
+            { name: "Descript", description: "Automatic transcription with word-level accuracy and easy caption export for video", link: "https://www.descript.com/", category: "Accessibility" },
+            { name: "Rev", description: "AI and human-powered captioning service with high accuracy for video and audio", link: "https://www.rev.com/", category: "Accessibility" },
+            { name: "Kapwing (Auto Subtitles)", description: "One-click AI subtitle generation with customizable styles for social media video", link: "https://www.kapwing.com/", category: "Accessibility" },
+            { name: "Microsoft Stream (Auto Captions)", description: "Built-in AI captioning for Microsoft 365 video content with transcript search", link: "https://www.microsoft.com/en-us/microsoft-365/microsoft-stream", category: "Accessibility" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other accessibility tools", node: "accessibility" }
+          ]
+        },
+        alt_text_tools: {
+          title: "AI Alt Text and Image Description Tools",
+          description: "Tools that generate descriptions for images to improve accessibility:",
+          tools: [
+            { name: "ChatGPT (Vision)", description: "Upload images to GPT-4o for detailed, context-aware alt text and image descriptions", link: "https://chat.openai.com/", category: "Accessibility" },
+            { name: "Claude (Vision)", description: "Anthropic's multimodal AI generates thorough image descriptions and alt text from uploads", link: "https://claude.ai/", category: "Accessibility" },
+            { name: "Microsoft Copilot (Alt Text)", description: "Auto-generated alt text in Word, PowerPoint, and Outlook with manual override", link: "https://copilot.microsoft.com/", category: "Accessibility" },
+            { name: "AltText.ai", description: "Dedicated alt text generation service with API, CMS plugins, and bulk processing", link: "https://alttext.ai/", category: "Accessibility" },
+            { name: "Gemini 2.5 Pro (Vision)", description: "Google's multimodal model provides detailed image analysis and description generation", link: "https://gemini.google.com/", category: "Accessibility" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other accessibility tools", node: "accessibility" }
+          ]
+        },
+        reading_level_tools: {
+          title: "Reading Level and Language Simplification Tools",
+          description: "Tools that simplify text and adapt content for different reading levels:",
+          tools: [
+            { name: "Diffit", description: "AI tool that adapts any topic or text to specific grade levels with vocabulary support", link: "https://diffit.me/", category: "Accessibility" },
+            { name: "Rewordify", description: "Simplifies difficult English text and provides vocabulary-building exercises", link: "https://rewordify.com/", category: "Accessibility" },
+            { name: "Claude", description: "Prompt Claude to rewrite content at a target grade level with vocabulary scaffolding", link: "https://claude.ai/", category: "Accessibility" },
+            { name: "Immersive Reader (Microsoft)", description: "Built-in reading tool with text-to-speech, syllable breakdown, and picture dictionary", link: "https://education.microsoft.com/en-us/resource/9b010288", category: "Accessibility" },
+            { name: "Magic School (Reading Level)", description: "AI educator tool that adjusts text complexity for differentiated instruction", link: "https://magicschool.ai/", category: "Accessibility" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other accessibility tools", node: "accessibility" }
+          ]
+        },
+        coding: {
+          title: "What kind of coding help do you need?",
+          options: [
+            { text: "Code generation and completion", node: "code_generation" },
+            { text: "Code review and quality", node: "code_review" },
+            { text: "Terminal and CLI agents", node: "terminal_agents" }
+          ]
+        },
+        code_generation: {
+          title: "AI Code Generation Tools",
+          description: "Tools that write and complete code from natural language:",
+          tools: [
+            { name: "GitHub Copilot", description: "AI pair programmer with inline completions, chat, and multi-file editing in VS Code and JetBrains", link: "https://github.com/features/copilot", category: "Code Generation" },
+            { name: "Cursor", description: "AI-first code editor with codebase-aware chat, multi-file edits, and composer mode", link: "https://cursor.sh/", category: "Code Generation" },
+            { name: "Replit Agent", description: "Full-stack AI agent that builds, debugs, and deploys complete apps from natural language", link: "https://replit.com/", category: "Code Generation" },
+            { name: "Claude (Sonnet 4.5)", description: "Anthropic's fast coding model excelling at code generation, explanation, and debugging", link: "https://claude.ai/", category: "Code Generation" },
+            { name: "Windsurf (Codeium)", description: "AI-powered IDE with intelligent code completion, search, and multi-file context", link: "https://codeium.com/windsurf", category: "Code Generation" },
+            { name: "Amazon Q Developer", description: "AWS AI assistant for code generation, transformation, security scanning, and AWS integration", link: "https://aws.amazon.com/q/developer/", category: "Code Generation" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other coding tools", node: "coding" }
+          ]
+        },
+        code_review: {
+          title: "AI Code Review Tools",
+          description: "Tools that analyze code quality, find bugs, and suggest improvements:",
+          tools: [
+            { name: "GitHub Copilot (Code Review)", description: "AI-powered pull request review that suggests improvements and catches issues", link: "https://github.com/features/copilot", category: "Code Review" },
+            { name: "CodeRabbit", description: "AI code reviewer that provides contextual PR reviews with summaries and improvement suggestions", link: "https://coderabbit.ai/", category: "Code Review" },
+            { name: "Sourcery", description: "Automated code review focused on Python quality, complexity, and refactoring suggestions", link: "https://sourcery.ai/", category: "Code Review" },
+            { name: "SonarQube (AI)", description: "Code quality platform with AI-enhanced bug detection, security analysis, and tech debt tracking", link: "https://www.sonarsource.com/products/sonarqube/", category: "Code Review" },
+            { name: "Snyk Code", description: "AI-powered security scanning that finds and fixes vulnerabilities in real-time as you code", link: "https://snyk.io/product/snyk-code/", category: "Code Review" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other coding tools", node: "coding" }
+          ]
+        },
+        terminal_agents: {
+          title: "AI Terminal and CLI Agents",
+          description: "AI agents that work directly in your terminal and command line:",
+          tools: [
+            { name: "Claude Code", description: "Anthropic's agentic CLI tool for coding, debugging, git operations, and multi-file refactoring", link: "https://docs.anthropic.com/en/docs/claude-code", category: "Terminal Agents" },
+            { name: "GitHub Copilot CLI", description: "AI-powered command-line tool that suggests shell commands and explains errors", link: "https://github.com/features/copilot", category: "Terminal Agents" },
+            { name: "Aider", description: "Open-source AI pair programming tool that edits code in your local git repo via terminal", link: "https://aider.chat/", category: "Terminal Agents" },
+            { name: "Warp AI", description: "Modern terminal with built-in AI that explains commands, debugs errors, and suggests workflows", link: "https://www.warp.dev/", category: "Terminal Agents" },
+            { name: "Open Interpreter", description: "Open-source tool that lets language models run code locally via a terminal chat interface", link: "https://openinterpreter.com/", category: "Terminal Agents" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other coding tools", node: "coding" }
+          ]
+        },
+        research: {
+          title: "What research task do you need help with?",
+          options: [
+            { text: "Finding academic literature", node: "lit_search" },
+            { text: "Managing citations and references", node: "citation_managers" },
+            { text: "Summarizing papers and content", node: "summarization" }
+          ]
+        },
+        lit_search: {
+          title: "AI Literature Search Tools",
+          description: "Tools that help you find and explore academic research:",
+          tools: [
+            { name: "Elicit", description: "AI research assistant that searches 200M+ papers and extracts key findings automatically", link: "https://elicit.org/", category: "Literature Search" },
+            { name: "Semantic Scholar", description: "AI-powered academic search engine with citation analysis and research recommendations", link: "https://www.semanticscholar.org/", category: "Literature Search" },
+            { name: "Consensus", description: "AI search engine that synthesizes findings from peer-reviewed scientific papers", link: "https://consensus.app/", category: "Literature Search" },
+            { name: "Perplexity (Academic)", description: "AI search with academic focus mode for finding and citing scholarly sources", link: "https://www.perplexity.ai/", category: "Literature Search" },
+            { name: "Connected Papers", description: "Visual tool that maps relationships between academic papers for literature discovery", link: "https://www.connectedpapers.com/", category: "Literature Search" },
+            { name: "Scite", description: "AI platform showing how papers are cited — supporting, contrasting, or mentioning claims", link: "https://scite.ai/", category: "Literature Search" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other research tools", node: "research" }
+          ]
+        },
+        citation_managers: {
+          title: "AI-Enhanced Citation Managers",
+          description: "Tools for organizing references and generating citations:",
+          tools: [
+            { name: "Zotero (with AI plugins)", description: "Free, open-source reference manager with AI plugins for summarization and PDF analysis", link: "https://www.zotero.org/", category: "Citations" },
+            { name: "Mendeley", description: "Elsevier's reference manager with AI-powered article recommendations and collaborative features", link: "https://www.mendeley.com/", category: "Citations" },
+            { name: "Paperpile", description: "Modern reference manager with AI-assisted search, one-click import, and Google Docs integration", link: "https://paperpile.com/", category: "Citations" },
+            { name: "EndNote", description: "Professional-grade reference manager with AI-powered deduplication and manuscript matching", link: "https://endnote.com/", category: "Citations" },
+            { name: "Scispace (Typeset)", description: "AI tool that reads papers, explains concepts, and generates properly formatted citations", link: "https://typeset.io/", category: "Citations" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other research tools", node: "research" }
+          ]
+        },
+        summarization: {
+          title: "AI Summarization Tools",
+          description: "Tools that condense papers, articles, and long content:",
+          tools: [
+            { name: "NotebookLM", description: "Upload research papers and get AI summaries, Q&A, and even audio podcast-style overviews", link: "https://notebooklm.google.com/", category: "Summarization" },
+            { name: "Claude (Long Context)", description: "Summarize documents up to 200K tokens with Anthropic's models — ideal for entire papers or books", link: "https://claude.ai/", category: "Summarization" },
+            { name: "ChatGPT (GPT-4o)", description: "Upload PDFs and get summaries, key takeaways, and answers about any document", link: "https://chat.openai.com/", category: "Summarization" },
+            { name: "Scholarcy", description: "AI summarizer purpose-built for academic papers — extracts claims, methods, and key references", link: "https://www.scholarcy.com/", category: "Summarization" },
+            { name: "Scispace (Typeset)", description: "AI copilot for research papers that explains, highlights, and summarizes while you read", link: "https://typeset.io/", category: "Summarization" }
+          ],
+          options: [
+            { text: "Start over", node: "start" },
+            { text: "Explore other research tools", node: "research" }
+          ]
+        },
         organization: {
           title: "What type of organization do you work in?",
           options: [
             { text: "Defense or Government Agency", node: "defense" },
-            { text: "Education/Research", node: "education" }
+            { text: "Education / Research", node: "education" }
           ]
         },
-
         defense: {
           title: "Security and Compliance Tools for Government",
           description: "Specialized tools for government and defense environments:",
           tools: [
-            { name: "AskSage", description: "Government secure AI platform with IL5 authorization", link: "https://www.asksage.ai/" },
-            { name: "Copilot for Government", description: "Microsoft's AI assistant built for government compliance", link: "https://www.microsoft.com/en-us/microsoft-365/government/microsoft-365-copilot-for-government" },
-            { name: "Google Workspace with Gemini for Government", description: "Google's secure AI features for government use", link: "https://workspace.google.com/industries/government/" }
+            { name: "AskSage", description: "FedRAMP-authorized, IL5-certified AI platform purpose-built for government agencies", link: "https://www.asksage.ai/", category: "Government" },
+            { name: "Microsoft 365 Copilot for Government", description: "AI assistant with GCC High and DoD compliance for government Microsoft 365 environments", link: "https://www.microsoft.com/en-us/microsoft-365/government/microsoft-365-copilot-for-government", category: "Government" },
+            { name: "Google Workspace with Gemini (Gov)", description: "FedRAMP-authorized Gemini AI features within Google Workspace for government agencies", link: "https://workspace.google.com/industries/government/", category: "Government" },
+            { name: "Amazon Bedrock (GovCloud)", description: "AWS managed AI service in GovCloud with access to multiple foundation models for government use", link: "https://aws.amazon.com/govcloud-us/", category: "Government" }
           ],
           options: [
             { text: "Start over", node: "start" },
             { text: "Explore different options", node: "organization" }
           ]
         },
-
-      education: {
-        title: "Education and Research Tools",
-        description: "AI tools tailored for educational environments:",
-        tools: [
-            { name: "Century", description: "AI learning platform for personalized education", link: "https://www.century.tech/" },
-            { name: "Gradescope", description: "AI-assisted grading and assessment tool", link: "https://www.gradescope.com/" },
-            { name: "Elicit", description: "Research assistant for literature review", link: "https://elicit.org/" },
-            { name: "Eduaide", description: "AI-powered teaching assistant for educators", link: "https://eduaide.ai/" },
-            { name: "SchoolAI", description: "Comprehensive AI platform for school management and learning", link: "https://www.schoolai.com/" },
-            { name: "Magic School", description: "Interactive AI-driven learning experiences for students", link: "https://magicschool.ai/" },
-            { name: "Quizizz", description: "Gamified assessment platform with AI-powered insights", link: "https://quizizz.com/" },
-            { name: "Questionwell", description: "AI-driven question generation for exams and assessments", link: "https://questionwell.org/" }
+        education: {
+          title: "Education and Research Tools",
+          description: "AI tools tailored for educational environments:",
+          tools: [
+            { name: "Magic School", description: "AI platform for educators with 60+ tools for lesson planning, rubrics, IEPs, and differentiation", link: "https://magicschool.ai/", category: "Education" },
+            { name: "SchoolAI", description: "AI learning platform with customizable student-facing spaces and teacher dashboards", link: "https://www.schoolai.com/", category: "Education" },
+            { name: "Eduaide.AI", description: "AI teaching assistant generating lesson plans, assessments, and instructional content", link: "https://eduaide.ai/", category: "Education" },
+            { name: "Quizizz (AI)", description: "Gamified assessment platform with AI quiz generation and adaptive learning features", link: "https://quizizz.com/", category: "Education" },
+            { name: "Gradescope", description: "AI-assisted grading platform for handwritten and coded assignments with rubric-based feedback", link: "https://www.gradescope.com/", category: "Education" },
+            { name: "Century Tech", description: "AI learning platform that creates personalized learning paths based on cognitive science", link: "https://www.century.tech/", category: "Education" },
+            { name: "Questionwell", description: "AI question generator that creates assessments from any uploaded content or topic", link: "https://questionwell.org/", category: "Education" },
+            { name: "NotebookLM", description: "Google's AI notebook — great for student research, source analysis, and study guide creation", link: "https://notebooklm.google.com/", category: "Education" }
           ],
           options: [
-              { text: "Start over", node: "start" },
-              { text: "Explore different options", node: "organization" }
-            ]
-          }
+            { text: "Start over", node: "start" },
+            { text: "Explore different options", node: "organization" }
+          ]
+        }
       };
 
-      // AIArcadeFinder component
+      // ════════════════════════════════════════════
+      //  localStorage helpers
+      // ════════════════════════════════════════════
+      const STORAGE_KEY = 'aiArcadeFavorites';
+
+      function loadFavorites() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveFavorites(favorites) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+        } catch {
+          // storage full or disabled — silent fail
+        }
+      }
+
+      // ════════════════════════════════════════════
+      //  CSV Export
+      // ════════════════════════════════════════════
+      function exportFavoritesCSV(favorites) {
+        const header = 'Name,Category,URL';
+        const rows = favorites.map(f => {
+          const name = '"' + (f.name || '').replace(/"/g, '""') + '"';
+          const cat  = '"' + (f.category || '').replace(/"/g, '""') + '"';
+          const url  = '"' + (f.link || '').replace(/"/g, '""') + '"';
+          return name + ',' + cat + ',' + url;
+        });
+        const csv = [header, ...rows].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ai-arcade-favorites.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      // ════════════════════════════════════════════
+      //  Splash Screen Component
+      // ════════════════════════════════════════════
+      const SplashScreen = ({ onDone }) => {
+        const [filling, setFilling] = React.useState(false);
+        const [fading, setFading] = React.useState(false);
+
+        React.useEffect(() => {
+          // Start filling animation after mount
+          const t1 = setTimeout(() => setFilling(true), 100);
+          // Begin fade out
+          const t2 = setTimeout(() => setFading(true), 2200);
+          // Complete
+          const t3 = setTimeout(() => onDone(), 2700);
+          return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+        }, [onDone]);
+
+        return (
+          <div
+            className={'splash-overlay' + (fading ? ' fade-out' : '')}
+            role="status"
+            aria-label="Loading AI Arcade Finder by LearnAILD"
+          >
+            <div className="splash-brand" aria-hidden="true">LearnAILD</div>
+            <div className="splash-sub">AI Arcade Finder</div>
+            <div className="splash-bar" aria-hidden="true">
+              <div className={'splash-bar-inner' + (filling ? ' filling' : '')} />
+            </div>
+          </div>
+        );
+      };
+
+      // ════════════════════════════════════════════
+      //  SVG Search Icon
+      // ════════════════════════════════════════════
+      const SearchIcon = () => (
+        <svg className="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      );
+
+      // ════════════════════════════════════════════
+      //  Main App Component
+      // ════════════════════════════════════════════
       const AIArcadeFinder = () => {
         const [currentNode, setCurrentNode] = React.useState('start');
         const [searchQuery, setSearchQuery] = React.useState('');
         const [history, setHistory] = React.useState([]);
-        const [selectedTools, setSelectedTools] = React.useState([]);
+        const [favorites, setFavorites] = React.useState(loadFavorites);
+        const [announcement, setAnnouncement] = React.useState('');
+        const [showSplash, setShowSplash] = React.useState(true);
 
-        const currentData = toolNodes[currentNode] || { title: "Coming Soon", description: "New content will be available shortly!", options: [] };
+        const mainRef = React.useRef(null);
+        const titleRef = React.useRef(null);
+
+        // Persist favorites
+        React.useEffect(() => {
+          saveFavorites(favorites);
+        }, [favorites]);
+
+        const currentData = toolNodes[currentNode] || {
+          title: "Coming Soon",
+          description: "New content will be available shortly!",
+          options: []
+        };
+
+        const announce = (msg) => {
+          setAnnouncement('');
+          setTimeout(() => setAnnouncement(msg), 50);
+        };
 
         const navigate = (node) => {
-          setHistory([...history, currentNode]);
+          setHistory(prev => [...prev, currentNode]);
           setCurrentNode(node);
           setSearchQuery('');
-          // Scroll to top when navigating
-          window.scrollTo(0, 0);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          const target = toolNodes[node];
+          if (target) announce('Navigated to: ' + target.title);
+          // Focus the card title for screen readers
+          setTimeout(() => {
+            if (titleRef.current) titleRef.current.focus();
+          }, 100);
         };
 
         const goBack = () => {
           if (history.length > 0) {
-            const previousNode = history[history.length - 1];
-            setCurrentNode(previousNode);
-            setHistory(history.slice(0, -1));
+            const prev = history[history.length - 1];
+            setCurrentNode(prev);
+            setHistory(h => h.slice(0, -1));
             setSearchQuery('');
+            announce('Went back');
+            setTimeout(() => {
+              if (titleRef.current) titleRef.current.focus();
+            }, 100);
           }
         };
 
         const resetGame = () => {
           setCurrentNode('start');
           setHistory([]);
-          setSelectedTools([]);
           setSearchQuery('');
+          announce('Returned to start');
+          setTimeout(() => {
+            if (titleRef.current) titleRef.current.focus();
+          }, 100);
         };
 
-        const selectTool = (tool) => {
-          if (!selectedTools.includes(tool)) {
-            setSelectedTools([...selectedTools, tool]);
+        const isFavorited = (toolName) => favorites.some(f => f.name === toolName);
+
+        const toggleFavorite = (tool) => {
+          if (isFavorited(tool.name)) {
+            setFavorites(prev => prev.filter(f => f.name !== tool.name));
+            announce(tool.name + ' removed from favorites');
+          } else {
+            setFavorites(prev => [...prev, { name: tool.name, category: tool.category || '', link: tool.link || '' }]);
+            announce(tool.name + ' added to favorites');
           }
         };
 
-        const filteredTools = currentData.tools ? currentData.tools.filter(tool => 
-          tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-          tool.description.toLowerCase().includes(searchQuery.toLowerCase())
-        ) : [];
+        const removeFavorite = (name) => {
+          setFavorites(prev => prev.filter(f => f.name !== name));
+          announce(name + ' removed from favorites');
+        };
+
+        const filteredTools = currentData.tools
+          ? currentData.tools.filter(tool =>
+              tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+          : [];
+
+        if (showSplash) {
+          return <SplashScreen onDone={() => setShowSplash(false)} />;
+        }
 
         return (
-          <div className="container">
-            <div className="content-box">
-              <div className="header">
-                <h1 className="title">AI ARCADE</h1>
-              </div>
-              
-              <div className="main-card">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="card-title" style={{ margin: 0 }}>{currentData.title}</h2>
-                  <div className="flex space-x-4">
-                    <button 
-                      onClick={resetGame}
-                      className="back-button"
-                      style={{ marginBottom: 0 }}
-                    >
-                      Start Over
-                    </button>
-                    {history.length > 0 && (
-                      <button 
-                        onClick={goBack}
-                        className="back-button"
-                        style={{ marginBottom: 0 }}
+          <React.Fragment>
+            {/* Background effects */}
+            <div className="bg-grid" aria-hidden="true" />
+            <div className="bg-scanline" aria-hidden="true" />
+
+            {/* SR live region */}
+            <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+              {announcement}
+            </div>
+
+            <div className="container">
+              <div className="content-box">
+                {/* Header */}
+                <header className="header">
+                  <div className="header-brand">LearnAILD</div>
+                  <h1 className="title">AI ARCADE</h1>
+                </header>
+
+                {/* Main content area */}
+                <main id="main-content" ref={mainRef} aria-label="AI Tool Finder">
+                  <div className="main-card" role="region" aria-label={currentData.title}>
+                    {/* Card header with title and nav buttons */}
+                    <div className="card-header">
+                      <h2
+                        className="card-title"
+                        ref={titleRef}
+                        tabIndex="-1"
                       >
-                        Go Back
-                      </button>
+                        {currentData.title}
+                      </h2>
+                      <nav className="card-nav" aria-label="Navigation">
+                        <button
+                          onClick={resetGame}
+                          className="btn-sm"
+                          aria-label="Start over from the beginning"
+                        >
+                          Start Over
+                        </button>
+                        {history.length > 0 && (
+                          <button
+                            onClick={goBack}
+                            className="btn-sm"
+                            aria-label="Go back to previous section"
+                          >
+                            Go Back
+                          </button>
+                        )}
+                      </nav>
+                    </div>
+
+                    {currentData.description && (
+                      <p className="card-description">{currentData.description}</p>
                     )}
-                  </div>
-                </div>
-                
-                {currentData.description && (
-                  <p className="card-description">{currentData.description}</p>
-                )}
-                
-                {currentData.options && currentData.options.length > 0 && !currentData.tools && (
-                  <div className="button-grid">
-                    {currentData.options.map((option, idx) => (
-                      <button 
-                        key={idx} 
-                        className="glow-button"
-                        onClick={() => navigate(option.node)}
-                      >
-                        {option.text}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                
-                {currentData.tools && (
-                  <>
-                    <div>
-                      <input
-                        type="text"
-                        placeholder="Search tools..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
-                      />
-                    </div>
-                    
-                    <div>
-                      {filteredTools.map((tool, idx) => (
-                        <div key={idx} className="tool-card">
-                          <h3 className="tool-title">{tool.name}</h3>
-                          <p className="tool-description">{tool.description}</p>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <a 
-                              href={tool.link} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="tool-link"
-                            >
-                              Visit Site
-                            </a>
-                            <button 
-                              onClick={() => selectTool(tool.name)}
-                              className="nav-button"
-                              style={{ padding: '6px 12px', fontSize: '0.9rem' }}
-                            >
-                              Save to my list
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                      
-                      {filteredTools.length === 0 && searchQuery && (
-                        <p style={{ textAlign: 'center', color: '#dbeafe', padding: '20px 0' }}>
-                          No matching tools found.
-                        </p>
-                      )}
-                    </div>
-                    
-                    {currentData.options && currentData.tools && (
-                      <div className="bottom-nav">
+
+                    {/* Option buttons (category/subcategory navigation) */}
+                    {currentData.options && currentData.options.length > 0 && !currentData.tools && (
+                      <div className="button-grid" role="list" aria-label="Choose a category">
                         {currentData.options.map((option, idx) => (
                           <button
                             key={idx}
+                            className="glow-button"
+                            role="listitem"
                             onClick={() => navigate(option.node)}
-                            className="nav-button"
                           >
                             {option.text}
                           </button>
                         ))}
                       </div>
                     )}
-                  </>
-                )}
+
+                    {/* Tool listings */}
+                    {currentData.tools && (
+                      <React.Fragment>
+                        <div className="search-wrapper">
+                          <label htmlFor="tool-search" className="search-label">
+                            Search tools
+                          </label>
+                          <SearchIcon />
+                          <input
+                            id="tool-search"
+                            type="search"
+                            placeholder="Type to filter tools..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="search-input"
+                            aria-describedby="search-status"
+                          />
+                        </div>
+
+                        <div
+                          id="search-status"
+                          className="sr-only"
+                          role="status"
+                          aria-live="polite"
+                        >
+                          {searchQuery
+                            ? filteredTools.length + ' tool' + (filteredTools.length !== 1 ? 's' : '') + ' found'
+                            : ''
+                          }
+                        </div>
+
+                        <div role="list" aria-label="AI tools">
+                          {filteredTools.map((tool, idx) => (
+                            <div
+                              key={tool.name + idx}
+                              className="tool-card"
+                              role="listitem"
+                              style={{ animationDelay: (idx * 0.05) + 's' }}
+                            >
+                              <h3 className="tool-title">{tool.name}</h3>
+                              <p className="tool-description">{tool.description}</p>
+                              <div className="tool-actions">
+                                <a
+                                  href={tool.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="tool-link"
+                                  aria-label={'Visit ' + tool.name + ' website (opens in new tab)'}
+                                >
+                                  Visit Site
+                                  <span aria-hidden="true"> &rarr;</span>
+                                </a>
+                                <button
+                                  onClick={() => toggleFavorite(tool)}
+                                  className={'btn-sm' + (isFavorited(tool.name) ? ' saved' : '')}
+                                  aria-pressed={isFavorited(tool.name)}
+                                  aria-label={
+                                    isFavorited(tool.name)
+                                      ? 'Remove ' + tool.name + ' from favorites'
+                                      : 'Save ' + tool.name + ' to favorites'
+                                  }
+                                >
+                                  {isFavorited(tool.name) ? 'Saved' : 'Save'}
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+
+                          {filteredTools.length === 0 && searchQuery && (
+                            <p className="no-results">
+                              No matching tools found for &ldquo;{searchQuery}&rdquo;
+                            </p>
+                          )}
+                        </div>
+
+                        {currentData.options && currentData.tools && (
+                          <nav className="bottom-nav" aria-label="Section navigation">
+                            {currentData.options.map((option, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => navigate(option.node)}
+                                className="btn-sm"
+                              >
+                                {option.text}
+                              </button>
+                            ))}
+                          </nav>
+                        )}
+                      </React.Fragment>
+                    )}
+                  </div>
+
+                  {/* Favorites Panel */}
+                  <section
+                    className="favorites-panel"
+                    aria-label="Your saved favorites"
+                  >
+                    <div className="favorites-header">
+                      <div>
+                        <h2 className="favorites-title">Your Favorites</h2>
+                        <span className="favorites-count">
+                          {favorites.length} tool{favorites.length !== 1 ? 's' : ''} saved
+                        </span>
+                      </div>
+                      {favorites.length > 0 && (
+                        <button
+                          onClick={() => exportFavoritesCSV(favorites)}
+                          className="btn-export"
+                          aria-label="Download favorites as CSV file"
+                        >
+                          Download CSV
+                        </button>
+                      )}
+                    </div>
+
+                    {favorites.length === 0 ? (
+                      <p className="favorites-empty">
+                        No favorites yet. Browse tools and click &ldquo;Save&rdquo; to build your list.
+                      </p>
+                    ) : (
+                      <ul className="favorites-list">
+                        {favorites.map((fav, idx) => (
+                          <li key={fav.name + idx} className="favorites-item">
+                            <div className="favorites-item-info">
+                              <div className="favorites-item-name">{fav.name}</div>
+                              {fav.category && (
+                                <div className="favorites-item-cat">{fav.category}</div>
+                              )}
+                            </div>
+                            <button
+                              onClick={() => removeFavorite(fav.name)}
+                              className="btn-sm btn-danger"
+                              aria-label={'Remove ' + fav.name + ' from favorites'}
+                            >
+                              Remove
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                </main>
               </div>
-              
-              {selectedTools.length > 0 && (
-                <div style={{ marginTop: '30px', padding: '20px', backgroundColor: 'rgba(17, 24, 39, 0.8)', borderRadius: '12px', border: '2px solid #3b82f6' }}>
-                  <h3 style={{ fontSize: '1.3rem', color: '#93c5fd', marginBottom: '15px' }}>Your Selected Tools:</h3>
-                  <ul style={{ listStyleType: 'none', padding: 0 }}>
-                    {selectedTools.map((tool, idx) => (
-                      <li key={idx} style={{ color: '#dbeafe', padding: '8px 0', borderBottom: '1px solid rgba(96,165,250,0.2)' }}>{tool}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
-          </div>
+          </React.Fragment>
         );
       };
 
-      // App component
-      const App = () => {
-        return <AIArcadeFinder />;
-      };
-
-      // Render the App to the DOM
+      // Render
       const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<App />);
+      root.render(<AIArcadeFinder />);
     </script>
   </body>
 </html>
